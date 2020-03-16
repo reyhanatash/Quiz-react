@@ -74,7 +74,7 @@ export default function AddTestSide(props) {
           name: `تست شماره ${data.rowNumber} فاقد عنوان تست میباشد`,
           id: data.pkTestMaster,
           rowNumber: data.rowNumber,
-          status: data.status,
+          status: data.fldStatus,
         });
       } else {
         Tests.unshift({
@@ -82,7 +82,7 @@ export default function AddTestSide(props) {
           Html: data.questionName,
           id: data.pkTestMaster,
           rowNumber: data.rowNumber,
-          status: data.status,
+          status: data.fldStatus,
         });
       }
     });
@@ -361,11 +361,11 @@ export default function AddTestSide(props) {
                         let statusClass;
                         let statusTitle;
                         let satusButton;
-                        if (item.status === 'کامل') {
+                        if (item.status === 1) {
                           statusClass = 'status-c';
                           satusButton = ' status-button-c';
                           statusTitle = 'تست کامل است';
-                        } else if (item.status === 'نيمه تمام') {
+                        } else if (item.status === 0) {
                           statusClass = 'status-u';
                           satusButton = ' status-button-u';
                           statusTitle = 'تست نیمه تمام است';
@@ -414,8 +414,9 @@ export default function AddTestSide(props) {
                                       aria-label="lens"
                                       className="position-absolute status-button"
                                       style={{ backgroundColor: 'transparent' }}
+                                      key={item.status}
                                     >
-                                      {item.status === 'کامل' ? (
+                                      {item.status === 1 ? (
                                         <Check
                                           className={`position-absolute status-icon ${statusClass}`}
                                         />

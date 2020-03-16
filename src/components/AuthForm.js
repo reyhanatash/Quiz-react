@@ -1,4 +1,4 @@
-import logo200Image from 'assets/img/logo/logo_200.png';
+import logo200Image from 'assets/img/logo/tambook-logo-140x91.png';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { userActions } from '../_actions';
@@ -145,7 +145,7 @@ class AuthForm extends React.Component {
             <img
               src={logo200Image}
               className="rounded"
-              style={{ width: 60, height: 60, cursor: 'pointer' }}
+              style={{ width: 75, height: 60, cursor: 'pointer' }}
               alt="logo"
               onClick={onLogoClick}
             />

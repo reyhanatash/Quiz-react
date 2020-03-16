@@ -501,7 +501,16 @@ function selectedItem(data) {
 function selectedTest(data) {
   return { type: allConstants.SELECTED_TEST, data };
 }
-function addBook(id, BookName, Author, FkMajor, FkGrade, FkBook, Description) {
+function addBook(
+  id,
+  BookName,
+  Author,
+  FkMajor,
+  FkGrade,
+  FkBook,
+  Description,
+  price,
+) {
   return dispatch => {
     dispatch(request());
     axios
@@ -515,6 +524,7 @@ function addBook(id, BookName, Author, FkMajor, FkGrade, FkBook, Description) {
           FkGrade: FkGrade,
           FkBook: FkBook,
           Description: Description,
+          Price: price,
         },
         {
           headers: {
@@ -1342,14 +1352,14 @@ function loadTopicSetting(testBookId) {
 }
 // Test Book Setting
 
-function TestBookSetting(pkSetting, TopicId, Duration, IsFinish) {
+function TestBookSetting(TestBookId, TopicId, Duration, IsFinish) {
   return dispatch => {
     dispatch(request());
     axios
       .post(
         url + 'api/Book/TestBookSetting',
         {
-          pkSetting,
+          TestBookId,
           TopicId,
           Duration,
           IsFinish,
@@ -1362,13 +1372,15 @@ function TestBookSetting(pkSetting, TopicId, Duration, IsFinish) {
         },
       )
       .then(response => {
-        if (
-          response.data.message === 'success' &&
-          response.data.data[0].message !== 'Faild'
-        ) {
-          alertify.success(response.data.data[0].showMessageToUser);
-        } else if (response.data.data[0].message === 'Faild') {
-          alertify.error(response.data.data[0].showMessageToUser);
+        if (response.data.message === 'success') {
+          if (response.data.data[0].message === 'Success') {
+            alertify.success(response.data.data[0].showMessageToUser);
+          } else if (
+            response.data.data[0].message === 'Faild' ||
+            response.data.data[0].message === 'Bug'
+          ) {
+            alertify.error(response.data.data[0].showMessageToUser);
+          }
         } else {
           alertify.error(response.data.message);
         }

@@ -55,6 +55,7 @@ function DashboardPageModal(props) {
   const Fkbook = React.createRef();
   const form = React.createRef();
   const TestBookDesc = React.createRef();
+  const price = React.createRef();
 
   const submit = e => {
     let id = props.isEditing ? props.editData.fldPkTestBook : -1;
@@ -86,6 +87,7 @@ function DashboardPageModal(props) {
       FkGrade: FkGradeVals.join(','),
       FkBook: FkBookVals.join(','),
       Description: TestBookDesc.current.value,
+      Price: price.current.value,
       // numChapterTestBook: numChapterTestBook.current.value,
       // numChapterTestBook: 0,
     };
@@ -297,6 +299,32 @@ function DashboardPageModal(props) {
                   : ''
               }
             />{' '}
+          </FormGroup>
+          <FormGroup>
+            <div
+              className="custom-select-react-label mb-2"
+              htmlFor="section-select"
+            >
+              قیمت
+            </div>
+            <div className="d-flex align-items-center">
+              <Input
+                className="direction-right col-11 form-control desc-quiz"
+                type="text"
+                name="text"
+                id="exampleText"
+                placeholder="10000"
+                innerRef={price}
+                defaultValue={
+                  props.isEditing && props.editData
+                    ? props.editData.fldPrice
+                    : ''
+                }
+              />
+              <span style={{ marginRight: '10px', fontSize: '16px' }}>
+                ریال
+              </span>
+            </div>
           </FormGroup>
           <FormGroup className="mt-4">
             <ButtonGroup className="d-flex">

@@ -137,7 +137,7 @@ class AddTestPage extends React.Component {
           this.state.filterdStatus,
         ),
       );
-    }, 300);
+    }, 600);
     setTimeout(() => {
       if (this.state.keepEditing === true) {
         this.selectedTest(id);

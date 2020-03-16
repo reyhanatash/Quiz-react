@@ -440,7 +440,7 @@ export default function EnhancedTable(props) {
                         scope="row"
                         padding="none"
                       >
-                        `{row.numTest}
+                        {row.numTest}
                       </TableCell>
                       <TableCell align="right">{row.author}</TableCell>
                       <TableCell align="right">

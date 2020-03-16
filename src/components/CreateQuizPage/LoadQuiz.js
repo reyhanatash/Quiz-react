@@ -132,6 +132,9 @@ function LoadQuiz(props) {
                     <span className="mb-2" style={{ fontSize: '0.94rem' }}>
                       تعداد تست ها : {data.testNum}
                     </span>
+                    <span className="mb-2" style={{ fontSize: '0.94rem' }}>
+                      تعداد دانش آموزان : {data.countPeople}
+                    </span>
                     <tr className="mb-2" style={{ fontSize: '0.94rem' }}>
                       <td>حداقل درصد : </td>
                       <td style={{ direction: 'ltr' }}>
@@ -153,9 +156,7 @@ function LoadQuiz(props) {
                         {data.averageRealTime ? '%' : ''}
                       </td>
                     </tr>
-                    <span className="mb-2" style={{ fontSize: '0.94rem' }}>
-                      تعداد دانش آموزان : {data.countPeople}
-                    </span>
+
                     <span
                       className="mb-2"
                       style={{

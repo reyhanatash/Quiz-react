@@ -29,8 +29,12 @@ class DashboardPage extends React.Component {
     });
   };
   // Go TO Book Page
-  goToBookPage = () => {
-    this.props.history.push('/books');
+  goToBookPage = type => {
+    this.props.history.push({ pathname: '/books', state: { type: type } });
+  };
+  // Go TO Sold Book Page
+  goToSoldBookPage = type => {
+    this.props.history.push('soldBooks');
   };
 
   // Clear
@@ -49,7 +53,7 @@ class DashboardPage extends React.Component {
             >
               <div
                 className="col-lg-3 col-md-6 col-sm-12 bg-light dashboard-admin-Box quiz-box-shadow m-4 rounded cursor-pointer"
-                onClick={this.goToBookPage}
+                onClick={() => this.goToBookPage('allBooks')}
               >
                 <div className="d-flex flex-column align-items-center justify-content-center py-2 rounded bg-light border-bottom">
                   <span
@@ -108,12 +112,15 @@ class DashboardPage extends React.Component {
                   <span className="py-3">کاربران</span>
                   <span className="h5 font-weight-bold">
                     {this.props.getDashboard
-                      ? this.props.getDashboard[0].countAllTeacher
+                      ? this.props.getDashboard[0].countAllStudent
                       : 0}
                   </span>
                 </div>
               </div>
-              <div className="col-lg-3 col-md-6 col-sm-12 bg-light dashboard-admin-Box quiz-box-shadow m-4 rounded cursor-pointer">
+              <div
+                className="col-lg-3 col-md-6 col-sm-12 bg-light dashboard-admin-Box quiz-box-shadow m-4 rounded cursor-pointer"
+                onClick={() => this.goToBookPage('booksReadyToPublish')}
+              >
                 <div className="d-flex flex-column align-items-center justify-content-center py-2 rounded bg-light border-bottom">
                   <span
                     className="d-flex flex-column justify-content-center align-items-center rounded-circle"
@@ -133,7 +140,10 @@ class DashboardPage extends React.Component {
                 </div>
               </div>
               <div className="col-lg-3 col-md-6 col-sm-12 bg-light dashboard-admin-Box quiz-box-shadow mx-4 my-2">
-                <div className="d-flex flex-column align-items-center justify-content-center py-2 rounded bg-light border-bottom cursor-pointer">
+                <div
+                  className="d-flex flex-column align-items-center justify-content-center py-2 rounded bg-light border-bottom cursor-pointer"
+                  onClick={() => this.goToSoldBookPage()}
+                >
                   <span
                     className="d-flex flex-column justify-content-center align-items-center rounded-circle"
                     style={{

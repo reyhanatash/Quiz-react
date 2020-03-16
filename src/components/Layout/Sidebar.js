@@ -1,4 +1,4 @@
-import logo200Image from 'assets/img/logo/logo_200.png';
+import logo200Image from 'assets/img/logo/tambook-logo-140x91.png';
 import sidebarBgImage from 'assets/img/sidebar/sidebar-4.jpg';
 import SourceLink from 'components/SourceLink';
 import React from 'react';
@@ -145,11 +145,11 @@ class Sidebar extends React.Component {
         <div className={bem.e('background')} style={sidebarBackground} />
         <div className={bem.e('content')}>
           <Navbar>
-            <div className="navbar-brand d-flex">
+            <div className="navbar-brand d-flex flex-column align-items-center justify-content-center m-auto">
               <img
                 src={logo200Image}
-                width="40"
-                height="30"
+                width="70"
+                height="50"
                 className="pr-2"
                 alt=""
               />

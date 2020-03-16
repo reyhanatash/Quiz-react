@@ -58,6 +58,7 @@ export default function EnhancedTable(props) {
         numTest: data.numTest,
         description: data.testBookDiscription,
         countPurchased: data.countPurchased,
+        price: data.fldPrice,
       });
     });
   }
@@ -90,6 +91,7 @@ export default function EnhancedTable(props) {
   // Head Rows
   const headCells = [
     { id: 'id-books', numeric: true, label: 'عملیات' },
+    { id: 'price', numeric: true, label: 'قیمت' },
     { id: 'countPurchased', numeric: true, label: 'تعداد فروش' },
     { id: 'numTest', numeric: true, label: 'تعداد تست ها' },
     { id: 'numChapter', numeric: true, label: 'تعداد فصل ها' },
@@ -413,6 +415,15 @@ export default function EnhancedTable(props) {
                               <AddIcon className={classes.actions3} />
                             </IconButton>
                           </Tooltip>
+                        </TableCell>
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                          className="direction-right"
+                        >
+                          {row.price} ریال
                         </TableCell>
                         <TableCell
                           component="th"

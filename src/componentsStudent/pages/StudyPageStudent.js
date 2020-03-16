@@ -5,19 +5,6 @@ import { Row, Col } from 'reactstrap';
 import { apiActionsStudent } from '../../_actions';
 import { allConstantsStudent } from '../../_constants';
 import alertify from 'alertifyjs';
-import {
-  FloatingMenu,
-  MainButton,
-  ChildButton,
-} from 'react-floating-button-menu';
-// import MdAdd from '@material-ui/icons/add';
-import CloseIcon from '@material-ui/icons/Close';
-import Done from '@material-ui/icons/AssignmentTurnedIn';
-import Later from '@material-ui/icons/AssignmentLate';
-import Ignore from '@material-ui/icons/AssignmentReturn';
-import Next from '@material-ui/icons/KeyboardBackspace';
-import Tooltip from '@material-ui/core/Tooltip';
-import { Button, ButtonGroup } from 'reactstrap';
 import StudyStyle from '../study/StudyStyle';
 import FilterTestsStudy from '../study/FilterTestsStudy';
 

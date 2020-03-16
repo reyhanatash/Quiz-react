@@ -28,12 +28,10 @@ export default function EnhancedTable(props) {
         id: data.fldPkTestBook,
         name: data.fldTestBookName,
         author: data.fldAuthor,
-        desc: data.fldTestBookDiscription,
-        averagePercent: data.averagePercent,
-        maxPercent: data.maxPercent,
-        minPercent: data.minPercent,
-        allTestCount: data.countAllTest,
-        date: data.dateShamsi,
+        desc: data.testBookDiscription,
+        price: data.fldPrice,
+        countSold: data.countSold,
+        totalSold: data.totalPrice,
       });
     });
   }
@@ -73,26 +71,9 @@ export default function EnhancedTable(props) {
   }
   // Head Rows
   const headCells = [
-    {
-      id: 'averagePercent',
-      numeric: true,
-      label: 'حداقل درصد',
-    },
-    {
-      id: 'averagePercent',
-      numeric: true,
-      label: 'حداکثر درصد',
-    },
-    {
-      id: 'averagePercent',
-      numeric: true,
-      label: 'میانگین درصد ',
-    },
-    {
-      id: 'averagePercent',
-      numeric: true,
-      label: 'تعداد تست ها',
-    },
+    { id: 'totalSold', numeric: false, label: 'جمع فروش ' },
+    { id: 'countSold', numeric: false, label: 'تعداد فروش ' },
+    { id: 'price', numeric: false, label: 'قیمت ' },
     { id: 'desc', numeric: false, label: 'توضیحات ' },
     { id: 'author', numeric: false, label: 'نویسنده' },
     { id: 'name', numeric: false, label: 'نام ' },
@@ -250,7 +231,7 @@ export default function EnhancedTable(props) {
   }));
   const classes = useStyles();
   const [order, setOrder] = React.useState('desc');
-  const [orderBy, setOrderBy] = React.useState('date');
+  const [orderBy, setOrderBy] = React.useState('name');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -369,38 +350,14 @@ export default function EnhancedTable(props) {
                           </IconButton>
                         </Tooltip>
                       </TableCell> */}
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.minPercent}
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.maxPercent}
-                      </TableCell>
-                      <TableCell
+                      {/* <TableCell
                         component="th"
                         id={labelId}
                         scope="row"
                         padding="none"
                       >
                         {row.averagePercent}
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.allTestCount}
-                      </TableCell>
+                      </TableCell> */}
                       {/* <TableCell
                         component="th"
                         id={labelId}
@@ -429,14 +386,21 @@ export default function EnhancedTable(props) {
                       >
                         {row.desc}
                       </TableCell> */}
+                      <TableCell align="right" className="direction-right">
+                        {row.totalSold} ریال
+                      </TableCell>
+                      <TableCell align="right">{row.countSold}</TableCell>
+                      <TableCell align="right" className="direction-right">
+                        {row.price} ریال
+                      </TableCell>
                       <TableCell
                         component="th"
                         id={labelId}
                         scope="row"
                         padding="none"
                       >
-                        {row.desc && row.desc.length > 70
-                          ? '...' + row.desc.slice(0, 70)
+                        {row.desc && row.desc.length > 127
+                          ? '...' + row.desc.slice(0, 127)
                           : row.desc}
                       </TableCell>
                       <TableCell align="right">{row.author}</TableCell>

@@ -56,13 +56,25 @@ const LoadQuizPageStudent = React.lazy(() =>
 
 // Admin
 const DashboardPageAdmin = React.lazy(() =>
-  import('componentsAdmin/Pages/DashboardPagesAdmin.js'),
+  import('componentsAdmin/Pages/DashboardPagesAdmin'),
 );
 const UsersPageAdmin = React.lazy(() =>
-  import('componentsAdmin/Pages/UsersPageAdmin.js'),
+  import('componentsAdmin/Pages/UsersPageAdmin'),
 );
 const BookPageAdmin = React.lazy(() =>
-  import('componentsAdmin/Pages/BookPageAdmin.js'),
+  import('componentsAdmin/Pages/BookPageAdmin'),
+);
+const TestPageAdmin = React.lazy(() =>
+  import('componentsAdmin/Pages/TestPageAdmin'),
+);
+const ViewTestAdmin = React.lazy(() =>
+  import('componentsAdmin/Pages/ViewTestAdmin'),
+);
+const QuizPageAdmin = React.lazy(() =>
+  import('componentsAdmin/Pages/QuizPageAdmin'),
+);
+const SoldBooksPageAdmin = React.lazy(() =>
+  import('componentsAdmin/Pages/SoldBooksPageAdmin'),
 );
 const getBasename = () => {
   return `/${process.env.PUBLIC_URL.split('/').pop()}`;
@@ -245,6 +257,26 @@ class App extends React.Component {
                         exact
                         path="/books"
                         component={BookPageAdmin}
+                      />
+                      <PrivateRoute
+                        exact
+                        path="/tests"
+                        component={TestPageAdmin}
+                      />
+                      <PrivateRoute
+                        exact
+                        path="/view-test"
+                        component={ViewTestAdmin}
+                      />
+                      <PrivateRoute
+                        exact
+                        path="/quiz"
+                        component={QuizPageAdmin}
+                      />
+                      <PrivateRoute
+                        exact
+                        path="/soldBooks"
+                        component={SoldBooksPageAdmin}
                       />
                     </>
                   ) : (

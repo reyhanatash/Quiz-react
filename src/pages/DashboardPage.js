@@ -93,6 +93,7 @@ class DashboardPage extends React.Component {
       FkBook,
       numChapterTestBook,
       Description,
+      Price,
     } = getBookModal;
     this.props.dispatch(
       apiActions.addBook(
@@ -103,6 +104,7 @@ class DashboardPage extends React.Component {
         FkGrade,
         FkBook,
         Description,
+        Price,
         numChapterTestBook,
       ),
     );
@@ -145,6 +147,7 @@ class DashboardPage extends React.Component {
       return filter.fldPkTestBook === id;
     });
     const defaultSetting = {
+      fldPkTestBook: data.fldPkTestBook,
       pkSetting: data.pkSetting,
       fkTopic: data.fkTopic,
       randomeQuizDuration: data.randomeQuizDuration,
@@ -157,9 +160,9 @@ class DashboardPage extends React.Component {
     }, 10);
   };
   getSettingModal = getSettingModal => {
-    const { pkSetting, TopicId, Duration, IsFinish } = getSettingModal;
+    const { TestBookId, TopicId, Duration, IsFinish } = getSettingModal;
     this.props.dispatch(
-      apiActions.TestBookSetting(pkSetting, TopicId, Duration, IsFinish),
+      apiActions.TestBookSetting(TestBookId, TopicId, Duration, IsFinish),
     );
   };
   render() {

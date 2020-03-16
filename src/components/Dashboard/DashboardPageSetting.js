@@ -38,20 +38,21 @@ function DashboardPageModal(props) {
   const quizTimeRef = React.createRef();
 
   const submit = e => {
+    console.log(props.testBookSetting);
     console.log(props.testBookId);
     console.log(quizTime);
     console.log(FkTopic.current.state.value.id);
     console.log(IsFinishValue);
-    const pkSetting =
-      props.testBookSetting && props.testBookSetting.pkSetting
-        ? props.testBookSetting.pkSetting
+    const TestBookId =
+      props.testBookSetting && props.testBookSetting.fldPkTestBook
+        ? props.testBookSetting.fldPkTestBook
         : -1;
     const TopicId = FkTopic.current.state.value.id;
     const Duration = quizTime;
     const IsFinish = IsFinishValue;
     // Send Data
     const getSettingModal = {
-      pkSetting,
+      TestBookId,
       TopicId,
       Duration,
       IsFinish,
@@ -157,7 +158,7 @@ function DashboardPageModal(props) {
                 <Checkbox
                   defaultChecked={
                     props.testBookSetting &&
-                    props.testBookSetting.isFinish === true
+                    props.testBookSetting.isFinish === 1
                       ? true
                       : false
                   }

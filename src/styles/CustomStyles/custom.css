@@ -1435,5 +1435,31 @@ box-shadow: unset !important;
 .modal-teacher.modal-dialog{
 max-width: 600px !important;
 }
-
-
+.table-admin-test .MuiTableCell-root.MuiTableCell-alignRight.MuiTableCell-body{
+    direction: rtl !important;
+    text-align:  right !important;
+}
+.table-admin-test .MuiTableCell-root.py-1.text-left.MuiTableCell-body{
+    text-align:  left !important;
+}
+.MuiPaper-root.MuiPaper-elevation8.MuiPopover-paper.MuiPaper-rounded{
+    width: 350px;
+    min-height: 150px;
+    box-shadow:0px 0px 5px 0.5px rgba(0, 0, 0, 0.075);
+    padding: 10px;
+}
+.MuiTabs-flexContainer .MuiButtonBase-root.MuiTab-root{
+    min-height : 50px;
+}
+.MuiTabs-flexContainer .MuiButtonBase-root.Mui-selected.MuiTab-root:nth-child(1){
+    color : #45b649;
+}
+.MuiTabs-flexContainer .MuiButtonBase-root.Mui-selected.MuiTab-root:nth-child(2){
+    color : #C4161C;
+}
+.MuiButtonBase-root.MuiTab-root .MuiTab-wrapper{
+    flex-direction: row;
+}
+.MuiButtonBase-root.MuiTab-root .MuiTab-wrapper .MuiSvgIcon-root{
+    margin-left: 5px;
+}
