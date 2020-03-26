@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { lighten, makeStyles } from '@material-ui/core/styles';
-import { FormGroup, Label, Input, Button } from 'reactstrap';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -15,20 +14,15 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import Book from '@material-ui/icons/MenuBook';
-import AddIcon from '@material-ui/icons/ContactSupport';
-import EditIcon from '@material-ui/icons/Edit';
-import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
-import ListAltIcon from '@material-ui/icons/ListAlt';
-import Popper from '@material-ui/core/Popper';
-import Fade from '@material-ui/core/Fade';
+import { FormGroup, Label, Input, Button } from 'reactstrap';
 import Popover from '@material-ui/core/Popover';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
+import EditIcon from '@material-ui/icons/Edit';
+
 export default function EnhancedTable(props) {
-  const [title, settitle] = React.useState(props.title);
   // Adding Rows
   let rows = [];
   if (props.newdata) {
@@ -37,13 +31,14 @@ export default function EnhancedTable(props) {
         id: data.fldPkTestBook,
         name: data.fldTestBookName,
         author: data.fldAuthor,
+        isActive: data.fldIsActive,
         desc: data.fldTestBookDiscription,
-        Approve: data.fldApprove,
+        price: data.fldPrice,
+        approve: data.fldApprove,
         rejectComment: data.fldComment,
         rejectType: data.fldFkRejectType,
-        price: data.fldPrice,
         isFinish: data.fldIsFinish,
-        archiveDate: data.fldArchiveDate,
+        date: data.fldDateShamsi,
       });
     });
   }
@@ -78,6 +73,7 @@ export default function EnhancedTable(props) {
     console.log(newValue);
     setValueTabs(newValue);
   };
+
   function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
       return -1;
@@ -105,25 +101,22 @@ export default function EnhancedTable(props) {
   }
   // Head Rows
   const headCells = [
-    { id: 'id-books', numeric: true, label: 'عملیات' },
-
     {
-      id: 'Approve',
+      id: 'date',
+      numeric: true,
+      label: 'تاریخ آخرین تغییرات',
+    },
+    {
+      id: 'approve',
       numeric: true,
       label: 'وضعیت',
     },
-    {
-      id: 'Approve',
-      numeric: true,
-      label: 'تاریخ بایگانی',
-    },
     { id: 'price', numeric: false, label: 'قیمت ' },
-    // { id: 'phone', numeric: true, label: 'شماره تماس ' },
     { id: 'desc', numeric: false, label: 'توضیحات ' },
-    { id: 'author', numeric: false, label: 'نویسنده ' },
+    // { id: 'isActive', numeric: false, label: 'فعال / غیر فعال' },
+    { id: 'author', numeric: false, label: 'نویسنده' },
     { id: 'name', numeric: false, label: 'نام ' },
   ];
-
   function EnhancedTableHead(props) {
     const {
       classes,
@@ -148,9 +141,9 @@ export default function EnhancedTable(props) {
               inputProps={{ 'aria-label': 'select all desserts' }}
             /> */}
           </TableCell>
-          {headCells.map((headCell, index) => (
+          {headCells.map(headCell => (
             <TableCell
-              key={index}
+              key={headCell.id}
               align={headCell.numeric ? 'right' : 'left'}
               padding={headCell.disablePadding ? 'none' : 'default'}
               sortDirection={orderBy === headCell.id ? order : false}
@@ -235,7 +228,7 @@ export default function EnhancedTable(props) {
             </Typography>
           ) : (
             <h5 id="tableTitle" className="h5 pr-3">
-              {title}
+              لیست تمامی کتاب ها
             </h5>
           )}
         </div>
@@ -276,7 +269,7 @@ export default function EnhancedTable(props) {
   }));
   const classes = useStyles();
   const [order, setOrder] = React.useState('desc');
-  const [orderBy, setOrderBy] = React.useState('name');
+  const [orderBy, setOrderBy] = React.useState('date');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -340,7 +333,7 @@ export default function EnhancedTable(props) {
         <EnhancedTableToolbar numSelected={selected.length} />
         <div className={classes.tableWrapper}>
           <Table
-            className={classes.table + ' table-teachers-books'}
+            className={classes.table + ' table-student'}
             aria-labelledby="tableTitle"
             size={dense ? 'small' : 'medium'}
           >
@@ -376,59 +369,18 @@ export default function EnhancedTable(props) {
                           inputProps={{ 'aria-labelledby': labelId }}
                         /> */}
                       </TableCell>
-                      <TableCell className="py-1">
-                        <Tooltip
-                          className="table-icon-delete"
-                          title={<span>آزمون ها</span>}
-                        >
-                          <IconButton
-                            aria-label="delete"
-                            onClick={() => props.goToQuizPage(row)}
-                          >
-                            <Book />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip
-                          className="table-icon-detail"
-                          title={
-                            <span style={{ fontSize: '12px' }}>تست ها</span>
-                          }
-                        >
-                          <IconButton
-                            aria-label="Go to Test"
-                            onClick={() => props.goToTestPage(row)}
-                          >
-                            <ListAltIcon className={classes.actions3} />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip
-                          className="table-icon-info"
-                          title={
-                            <span style={{ fontSize: '12px' }}>جزئیات</span>
-                          }
-                        >
-                          <IconButton
-                            aria-label="Go to Test"
-                            onClick={() =>
-                              // props.openQuizModal(row.name, row.id, 2)
-                              props.toggleModalDetails(row)
-                            }
-                          >
-                            <LibraryBooksIcon className={classes.actions3} />
-                          </IconButton>
-                        </Tooltip>
-                      </TableCell>
+                      <TableCell align="right">{row.date}</TableCell>
                       <TableCell
                         component="th"
                         id={labelId}
                         scope="row"
                         padding="none"
                       >
-                        {row.Approve === true ? (
+                        {row.approve === true ? (
                           <span className="text-success">تایید شده</span>
-                        ) : row.Approve === false && row.isFinish === 1 ? (
+                        ) : row.approve === false && row.isFinish === 1 ? (
                           <span className="">تعیین نشده</span>
-                        ) : row.Approve === false && row.isFinish === 2 ? (
+                        ) : row.approve === false && row.isFinish === 2 ? (
                           <span className="text-danger">تایید نشده</span>
                         ) : (
                           'نامشخص'
@@ -475,9 +427,9 @@ export default function EnhancedTable(props) {
                           <Paper square style={{ width: '100%' }}>
                             <Tabs
                               value={
-                                valueTabs === null && data.Approve === false
+                                valueTabs === null && data.approve === false
                                   ? 1
-                                  : valueTabs === null && data.Approve === true
+                                  : valueTabs === null && data.approve === true
                                   ? 0
                                   : valueTabs
                               }
@@ -507,9 +459,9 @@ export default function EnhancedTable(props) {
                               id="exampleText"
                               placeholder="عدم..."
                               disabled={
-                                valueTabs === null && data.Approve === false
+                                valueTabs === null && data.approve === false
                                   ? false
-                                  : valueTabs === null && data.Approve === true
+                                  : valueTabs === null && data.approve === true
                                   ? true
                                   : valueTabs === 0
                                   ? true
@@ -543,6 +495,8 @@ export default function EnhancedTable(props) {
                                           onChange={() =>
                                             typeHandler(type.fldPkRejectType)
                                           }
+                                          type="radio"
+                                          name="type"
                                           defaultChecked={
                                             data.rejectType &&
                                             data.rejectType !== null
@@ -550,14 +504,12 @@ export default function EnhancedTable(props) {
                                                 type.fldPkRejectType
                                               : null
                                           }
-                                          type="radio"
-                                          name="type"
                                           disabled={
                                             valueTabs === null &&
-                                            data.Approve === false
+                                            data.approve === false
                                               ? false
                                               : valueTabs === null &&
-                                                data.Approve === true
+                                                data.approve === true
                                               ? true
                                               : valueTabs === 0
                                               ? true
@@ -589,11 +541,6 @@ export default function EnhancedTable(props) {
                           </FormGroup>
                         </Popover>
                       </TableCell>
-                      <TableCell align="right">
-                        {row.archiveDate !== ''
-                          ? row.archiveDate
-                          : 'بایگانی نشده'}
-                      </TableCell>
                       <TableCell align="right" className="direction-right">
                         {' '}
                         {row.price} ریال
@@ -603,12 +550,18 @@ export default function EnhancedTable(props) {
                         id={labelId}
                         scope="row"
                         padding="none"
-                        style={{ minWidth: '500px' }}
                       >
-                        {row.desc && row.desc.length > 110
-                          ? '...' + row.desc.slice(0, 110)
+                        {row.desc && row.desc.length > 97
+                          ? '...' + row.desc.slice(0, 97)
                           : row.desc}
                       </TableCell>
+                      {/* <TableCell align="right">
+                        {row.isActive
+                          ? 'فعال'
+                          : row.isActive === false
+                          ? 'غیر فعال'
+                          : 'نامشخص'}
+                      </TableCell> */}
                       <TableCell align="right">{row.author}</TableCell>
                       <TableCell align="right">{row.name}</TableCell>
                     </TableRow>
@@ -616,7 +569,7 @@ export default function EnhancedTable(props) {
                 })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                  <TableCell colSpan={7} />
+                  <TableCell colSpan={8} />
                 </TableRow>
               )}
             </TableBody>

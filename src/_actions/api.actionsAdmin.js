@@ -7,8 +7,17 @@ const cookies = new Cookies();
 export const apiActionsAdmin = {
   getDashboard,
   loadUsers,
+  loadTestBook,
+  loadTestBookReadyToPublish,
+  loadTestBookSold,
   loadBooksPerUser,
   ChangeActiveTeacher,
+  loadTestList,
+  loadRejectTypes,
+  approveOrRejectTestBook,
+  insertOrUpdateTeacher,
+  loadUserQuiz,
+  setArchiveTestBook,
 };
 let url;
 // if (
@@ -42,7 +51,7 @@ function getDashboard() {
             data: response.data.data,
           });
         } else {
-          alertify.error(response.data.message);
+          alertify.error(response.data.data[0].showMessageToUser);
         }
       })
       .catch(error => dispatch(failure(error)));
@@ -73,7 +82,100 @@ function loadUsers(type) {
             data: response.data.data,
           });
         } else {
-          alertify.error(response.data.message);
+          alertify.error(response.data.data[0].showMessageToUser);
+        }
+      })
+      .catch(error => dispatch(failure(error)));
+
+    function request(user) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_REQUEST, user };
+    }
+    function failure(error) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_FAILURE, error };
+    }
+  };
+}
+// Load TestBook
+function loadTestBook() {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .get(url + `api/book/LoadTestBook/`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + cookies.get('user'),
+        },
+      })
+      .then(response => {
+        if (response.data.message === 'success') {
+          dispatch({
+            type: allConstantsAdmin.LOAD_TEST_BOOKS,
+            data: response.data.data,
+          });
+        } else {
+          alertify.error(response.data.data[0].showMessageToUser);
+        }
+      })
+      .catch(error => dispatch(failure(error)));
+
+    function request(user) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_REQUEST, user };
+    }
+    function failure(error) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_FAILURE, error };
+    }
+  };
+}
+// Load TestBook Ready To Publish
+function loadTestBookReadyToPublish() {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .get(url + `api/book/LoadTestBookReadyToPublish/`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + cookies.get('user'),
+        },
+      })
+      .then(response => {
+        if (response.data.message === 'success') {
+          dispatch({
+            type: allConstantsAdmin.LOAD_TEST_BOOKS_READY_TO_PUBLISH,
+            data: response.data.data,
+          });
+        } else {
+          alertify.error(response.data.data[0].showMessageToUser);
+        }
+      })
+      .catch(error => dispatch(failure(error)));
+
+    function request(user) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_REQUEST, user };
+    }
+    function failure(error) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_FAILURE, error };
+    }
+  };
+}
+// Load TestBook Sold
+function loadTestBookSold() {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .get(url + `api/book/LoadTestBookSold/`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + cookies.get('user'),
+        },
+      })
+      .then(response => {
+        if (response.data.message === 'success') {
+          dispatch({
+            type: allConstantsAdmin.LOAD_TEST_BOOKS_SOLD,
+            data: response.data.data,
+          });
+        } else {
+          alertify.error(response.data.data[0].showMessageToUser);
         }
       })
       .catch(error => dispatch(failure(error)));
@@ -104,7 +206,7 @@ function loadBooksPerUser(userId) {
             data: response.data.data,
           });
         } else {
-          alertify.error(response.data.message);
+          alertify.error(response.data.data[0].showMessageToUser);
         }
       })
       .catch(error => dispatch(failure(error)));
@@ -138,13 +240,13 @@ function ChangeActiveTeacher(UserId, Status) {
       .then(response => {
         if (response.status === 200) {
           if (response.data.message === 'success') {
-            alertify.success(response.data.message);
+            alertify.success(response.data.data[0].showMessageToUser);
             // dispatch({
             //   type: allConstantsAdmin.CHANGE_ACTIVE_TEACHER,
             //   data: response.data.data,
             // });
           } else {
-            alertify.error(response.data.message);
+            alertify.error(response.data.data[0].showMessageToUser);
           }
         }
       })
@@ -155,32 +257,221 @@ function ChangeActiveTeacher(UserId, Status) {
     }
   };
 }
+// Load Test List
+function loadTestList(TestBookId, TestBookChapterId) {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .post(
+        url + `api/Book/LoadTestList`,
+        {
+          TestBookId,
+          TestBookChapterId,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + cookies.get('user'),
+          },
+        },
+      )
+      .then(response => {
+        if (response.data.message === 'success') {
+          dispatch({
+            type: allConstantsAdmin.LOAD_TEST_LIST,
+            data: response.data.data,
+          });
+        } else {
+          alertify.error(response.data.data[0].showMessageToUser);
+        }
+      })
+      .catch(error => dispatch(failure(error)));
 
-// // Load Quiz Student
-// function loadQuizStudent(bookId) {
-//   return dispatch => {
-//     dispatch(request());
-//     axios
-//       .get(url + `api/Book/LoadQuizTestBook/${bookId}`, {
-//         headers: {
-//           'Content-Type': 'application/json',
-//           Authorization: 'Bearer ' + cookies.get('user'),
-//         },
-//       })
-//       .then(response => {
-//         if (response.data.message === 'success') {
-//           dispatch({
-//             type: allConstantsStudent.QUIZ_STUDENT,
-//             data: response.data.data,
-//           });
-//         } else {
-//           alertify.error(response.data.message);
-//         }
-//       })
-//       .catch(error => console.log(error));
+    function request(user) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_REQUEST, user };
+    }
+    function failure(error) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_FAILURE, error };
+    }
+  };
+}
+// Load Reject Types
+function loadRejectTypes() {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .get(url + `api/book/LoadRejectType/`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + cookies.get('user'),
+        },
+      })
+      .then(response => {
+        if (response.data.message === 'success') {
+          dispatch({
+            type: allConstantsAdmin.LOAD_REJECT_TYPES,
+            data: response.data.data,
+          });
+        } else {
+          alertify.error(response.data.data[0].showMessageToUser);
+        }
+      })
+      .catch(error => dispatch(failure(error)));
 
-//     function request(user) {
-//       return { type: allConstantsStudent.LOAD_DASHBOARD_REQUEST, user };
-//     }
-//   };
-// }
+    function request(user) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_REQUEST, user };
+    }
+    function failure(error) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_FAILURE, error };
+    }
+  };
+}
+// Approve Or Reject TestBook
+function approveOrRejectTestBook(TestBookId, RejectType, IsApprove, Comment) {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .post(
+        url + 'api/Book/approveOrRejectTestBook',
+        {
+          TestBookId,
+          RejectType,
+          IsApprove,
+          Comment,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + cookies.get('user'),
+          },
+        },
+      )
+      .then(response => {
+        if (response.status === 200) {
+          if (response.data.message === 'success') {
+            alertify.success(response.data.data[0].showMessageToUser);
+          } else {
+            alertify.error(response.data.data[0].showMessageToUser);
+          }
+        }
+      })
+      .catch(error => console.log(error));
+
+    function request(response) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_REQUEST, response };
+    }
+  };
+}
+// Insert Or Update Teacher
+function insertOrUpdateTeacher(
+  id,
+  Name,
+  LastName,
+  UserName,
+  Email,
+  Password,
+  TypeCo,
+  PhoneNo,
+) {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .post(
+        url + 'api/User/SignUp',
+        {
+          id: id,
+          Name: Name,
+          LastName: LastName,
+          UserName: UserName,
+          Email: Email,
+          Password: Password,
+          TypeCo: 2,
+          PhoneNo: PhoneNo,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + cookies.get('user'),
+          },
+        },
+      )
+      .then(response => {
+        if (response.status === 200) {
+          if (response.data.message === 'success') {
+            alertify.success(response.data.data[0].showMessageToUser);
+          } else {
+            alertify.error(response.data.data[0].showMessageToUser);
+          }
+        }
+      })
+      .catch(error => console.log(error));
+
+    function request(response) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_REQUEST, response };
+    }
+  };
+}
+// Load Quiz List
+function loadUserQuiz(testbookId) {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .get(url + `api/book/LoadUserQuizFromAdmin/${testbookId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + cookies.get('user'),
+        },
+      })
+      .then(response => {
+        if (response.data.message === 'success') {
+          dispatch({
+            type: allConstantsAdmin.LOAD_USER_QUIZ,
+            data: response.data.data,
+          });
+        } else {
+          alertify.error(response.data.data[0].showMessageToUser);
+        }
+      })
+      .catch(error => dispatch(failure(error)));
+
+    function request(user) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_REQUEST, user };
+    }
+    function failure(error) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_FAILURE, error };
+    }
+  };
+}
+// Archive TestBook
+function setArchiveTestBook(TestBookId) {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .post(
+        url + 'api/Book/SetArchiveTestBook',
+        {
+          TestBookId,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + cookies.get('user'),
+          },
+        },
+      )
+      .then(response => {
+        if (response.status === 200) {
+          if (response.data.message === 'success') {
+            alertify.success(response.data.data[0].showMessageToUser);
+          } else {
+            alertify.error(response.data.data[0].showMessageToUser);
+          }
+        }
+      })
+      .catch(error => console.log(error));
+
+    function request(response) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_REQUEST, response };
+    }
+  };
+}
