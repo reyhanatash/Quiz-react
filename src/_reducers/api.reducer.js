@@ -28,6 +28,9 @@ const initialState = [
     loadQuiz: '',
     selectedQuiz: '',
     loadTopicSetting: '',
+    loadNotifications: '',
+    notificationsCount: '',
+    loadProfile: '',
   },
 ];
 
@@ -174,6 +177,21 @@ export function api(state = initialState, action) {
       return {
         ...state,
         loadTopicSetting: action.data,
+      };
+    case allConstants.LOAD_NOTIFICATIONS:
+      return {
+        ...state,
+        loadNotifications: action.data,
+      };
+    case allConstants.NOTIFICATIONS_COUNT:
+      return {
+        ...state,
+        notificationsCount: action.data,
+      };
+    case allConstants.LOAD_PROFILE:
+      return {
+        ...state,
+        loadProfile: action.data,
       };
     default:
       return state;

@@ -23,14 +23,16 @@ class DashboardPage extends React.Component {
   }
   // Go TO Test Page
   goToUsers = data => {
-    this.props.history.push({
-      pathname: `/users`,
-      state: data,
-    });
+    // this.props.history.push({
+    //   pathname: `/users`,
+    //   state: data,
+    // });
+    this.props.history.push(`users/${data}`);
   };
   // Go TO Book Page
   goToBookPage = type => {
-    this.props.history.push({ pathname: '/books', state: { type: type } });
+    // this.props.history.push({ pathname: '/books', state: { type: type } });
+    this.props.history.push(`books/${type}`);
   };
   // Go TO Sold Book Page
   goToSoldBookPage = type => {

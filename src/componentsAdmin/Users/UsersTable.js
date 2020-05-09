@@ -32,7 +32,10 @@ export default function EnhancedTable(props) {
         email: data.fldEmail,
         phone: data.fldPhoneNo,
         // type: data.fldFkTypeCo,
-        isActive: data.fldActive,
+        // isActive: data.fldActive,
+        dateRegister: data.registerDate,
+        totalPurchase: data.totalPurchasePrice,
+        totalDiscount: data.totalDiscountPrice,
       });
     });
   }
@@ -75,9 +78,19 @@ export default function EnhancedTable(props) {
     { id: 'id-books', numeric: true, label: 'عملیات' },
 
     {
-      id: 'isAvtive',
-      numeric: true,
-      label: 'وضعیت',
+      id: 'totalDiscount',
+      numeric: false,
+      label: 'مجموع تخفیف',
+    },
+    {
+      id: 'totalPurchase',
+      numeric: false,
+      label: 'مجموع خرید',
+    },
+    {
+      id: 'dateRegister',
+      numeric: false,
+      label: 'تاریخ عضویت',
     },
     // { id: 'type', numeric: true, label: 'نوع ' },
     // { id: 'phone', numeric: true, label: 'شماره تماس ' },
@@ -303,7 +316,7 @@ export default function EnhancedTable(props) {
         <EnhancedTableToolbar numSelected={selected.length} />
         <div className={classes.tableWrapper}>
           <Table
-            className={classes.table + ' table-student'}
+            className={classes.table + ' table-users-student'}
             aria-labelledby="tableTitle"
             size={dense ? 'small' : 'medium'}
           >
@@ -386,12 +399,26 @@ export default function EnhancedTable(props) {
                         id={labelId}
                         scope="row"
                         padding="none"
+                        className="direction-right"
                       >
-                        {row.isActive
-                          ? 'فعال'
-                          : row.isActive === false
-                          ? 'غیرفعال'
-                          : 'نامشخص'}
+                        {row.totalDiscount} ریال
+                      </TableCell>
+                      <TableCell
+                        component="th"
+                        id={labelId}
+                        scope="row"
+                        padding="none"
+                        className="direction-right"
+                      >
+                        {row.totalPurchase} ریال
+                      </TableCell>
+                      <TableCell
+                        component="th"
+                        id={labelId}
+                        scope="row"
+                        padding="none"
+                      >
+                        {row.dateRegister}
                       </TableCell>
                       {/* <TableCell
                         component="th"
@@ -430,7 +457,9 @@ export default function EnhancedTable(props) {
                         {row.userName}
                       </TableCell>
                       <TableCell align="right">{row.lastName}</TableCell>
-                      <TableCell align="right">{row.name}</TableCell>
+                      <TableCell align="right" className="mr-0">
+                        {row.name}
+                      </TableCell>
                     </TableRow>
                   );
                 })}

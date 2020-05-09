@@ -29,11 +29,16 @@ class TestPageStudent extends React.Component {
       apiActionsStudent.selectedTest(this.props.location.state),
     );
     if (this.props.location.state) {
-      const time = this.props.location.state.duration.split(':');
-      const hour = Number(time[0]);
-      const min = Number(time[1]);
-      const converted = hour * 60 * 60 + min * 60;
-      this.setState({ time: converted, extraTime: converted });
+      try {
+        const time = this.props.location.state.duration.split(':');
+        const hour = Number(time[0]);
+        const min = Number(time[1]);
+        const converted = hour * 60 * 60 + min * 60;
+        this.setState({ time: converted, extraTime: converted });
+      } catch (e) {
+        console.log(e);
+        return e;
+      }
     }
     console.log(this.props.location.state);
     this.props.dispatch(

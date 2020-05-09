@@ -14,6 +14,7 @@ import {
   MdNotificationsActive,
   MdNotificationsNone,
 } from 'react-icons/md';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import {
   Button,
   ListGroup,
@@ -26,24 +27,13 @@ import {
   PopoverBody,
 } from 'reactstrap';
 import bn from 'utils/bemnames';
-import { userActions } from '../../_actions';
+import { userActions, apiActions } from '../../_actions';
 import Cookies from 'universal-cookie';
+import ProfileModal from '../ProfileModal';
+
 const cookies = new Cookies();
 
 const bem = bn.create('header');
-
-const MdNotificationsActiveWithBadge = withBadge({
-  size: 'md',
-  color: 'primary',
-  style: {
-    top: -10,
-    right: -10,
-    display: 'inline-flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  children: <small>5</small>,
-})(MdNotificationsActive);
 
 class Header extends React.Component {
   state = {
@@ -51,6 +41,8 @@ class Header extends React.Component {
     isNotificationConfirmed: false,
     isOpenUserCardPopover: false,
     userInfo: {},
+    notificationsData: [],
+    modal: false,
   };
   constructor(props) {
     super(props);
@@ -61,14 +53,23 @@ class Header extends React.Component {
   componentDidMount() {
     document.addEventListener('mousedown', this.handleClickOutside);
     this.setState({ userInfo: cookies.get('userInfo') });
+    this.props.loadNotifications(null);
+    this.props.NotificationCount();
+    this.props.loadProfile();
+    // this.props.loadNotifications(null);
   }
-
   toggleNotificationPopover = () => {
+    this.props.NotificationCount();
+    this.props.loadNotifications(null);
     this.setState({
       isOpenNotificationPopover: !this.state.isOpenNotificationPopover,
+      notificationsData: this.props.loadNotificationsData,
     });
     if (!this.state.isNotificationConfirmed) {
       this.setState({ isNotificationConfirmed: true });
+    }
+    if (this.state.isOpenNotificationPopover) {
+      this.props.SeenNotifications();
     }
   };
   // Toggle User Section
@@ -94,6 +95,11 @@ class Header extends React.Component {
     this.setState({
       isOpenUserCardPopover: !this.state.isOpenUserCardPopover,
     });
+    if (!this.state.isOpenUserCardPopover) {
+      this.setState({
+        modal: false,
+      });
+    }
   };
 
   handleSidebarControlButton = event => {
@@ -106,10 +112,76 @@ class Header extends React.Component {
     this.props.history.push('/login');
     this.props.logOut();
   };
+  removeNotification = async id => {
+    await this.props.deleteNotification(id);
+    await this.props.NotificationCount();
+    await this.props.loadNotifications(null);
+    setTimeout(() => {
+      this.setState({
+        notificationsData: this.props.loadNotificationsData,
+      });
+    }, 350);
+  };
+  componentDidUpdate(prevProps) {
+    if (prevProps.location.pathname !== this.props.location.pathname) {
+      this.props.NotificationCount();
+    }
+  }
+  // Profile
+  // Toogle Modal
+  toggle = () => {
+    if (this.state.modal === false) {
+      this.setState({
+        isOpenUserCardPopover: false,
+      });
+    }
+    this.setState({
+      modal: !this.state.modal,
+    });
+
+    // this.props.dispatch(apiActions.getDashboard());
+  };
+  getProfileModal = getProfileModal => {
+    const {
+      Name,
+      LastName,
+      Email,
+      Password,
+      PhoneNumber,
+      BankAccountNumber,
+    } = getProfileModal;
+    this.props.updateProfile(
+      Name,
+      LastName,
+      Email,
+      Password,
+      PhoneNumber,
+      BankAccountNumber,
+    );
+  };
+
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
   }
   render() {
+    const MdNotificationsActiveWithBadge = withBadge({
+      size: 'md',
+      color: 'primary',
+      style: {
+        top: -10,
+        right: -10,
+        display: 'inline-flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      children: (
+        <small style={{ fontSize: 11 }} key={this.props.notificationsCount}>
+          {this.props.notificationsCount
+            ? this.props.notificationsCount[0].countNotSeen
+            : null}
+        </small>
+      ),
+    })(MdNotificationsActive);
     const { isNotificationConfirmed } = this.state;
     return (
       <Navbar light expand className={bem.b('bg-white')}>
@@ -121,38 +193,51 @@ class Header extends React.Component {
         {/* <Nav navbar>
           <SearchInput />
         </Nav> */}
-
         <Nav navbar className={bem.e('nav-right')}>
-          {/* <NavItem className="d-inline-flex">
-            <NavLink id="Popover1" className="position-relative">
-              {isNotificationConfirmed ? (
-                <MdNotificationsNone
-                  size={25}
-                  className="text-secondary can-click"
-                  onClick={this.toggleNotificationPopover}
-                />
-              ) : (
-                <MdNotificationsActiveWithBadge
-                  size={25}
-                  className="text-secondary can-click animated swing infinite"
-                  onClick={this.toggleNotificationPopover}
-                />
-              )}
-            </NavLink>
-            <Popover
-              placement="bottom"
-              isOpen={this.state.isOpenNotificationPopover}
-              toggle={this.toggleNotificationPopover}
-              target="Popover1"
-            >
-              <PopoverBody>
-                <Notifications notificationsData={notificationsData} />
-              </PopoverBody>
-            </Popover>
-          </NavItem> */}
+          {/* Notifications */}
+          {cookies.get('userInfo') && cookies.get('userInfo').role === '2' ? (
+            <NavItem className="d-inline-flex ml-1">
+              <NavLink id="Popover1" className="position-relative">
+                {isNotificationConfirmed ||
+                (this.props.notificationsCount &&
+                  this.props.notificationsCount[0].countNotSeen <= 0) ? (
+                  <MdNotificationsNone
+                    size={25}
+                    className="text-secondary can-click"
+                    onClick={this.toggleNotificationPopover}
+                  />
+                ) : (
+                  <MdNotificationsActiveWithBadge
+                    size={25}
+                    className="text-secondary can-click animated swing infinite"
+                    onClick={this.toggleNotificationPopover}
+                  />
+                )}
+              </NavLink>
+              <Popover
+                placement="bottom"
+                isOpen={this.state.isOpenNotificationPopover}
+                toggle={this.toggleNotificationPopover}
+                target="Popover1"
+                className="notifications-wrapper"
+              >
+                <PopoverBody style={{ maxHeight: '320px', overflowY: 'auto' }}>
+                  <Notifications
+                    key={this.state.notificationsData}
+                    notificationsData={this.state.notificationsData}
+                    countNew={this.props.notificationsCount}
+                    deleteNotification={this.removeNotification}
+                  />
+                </PopoverBody>
+              </Popover>
+            </NavItem>
+          ) : null}
+
+          {/* User Profile Avatar */}
           <NavItem className="ml-3 d-flex text-muted flex-wrap align-items-center">
             <span className="ml-1" style={{ fontSize: '0.9rem' }}>
-              سلام {this.state.userInfo ? this.state.userInfo.firstName : ''}
+              سلام{' '}
+              {this.props.profileData ? this.props.profileData[0].fldName : ''}
             </span>
             <NavLink id="Popover2" innerRef={this.setWrapperRef2}>
               <Avatar
@@ -172,12 +257,45 @@ class Header extends React.Component {
               <PopoverBody className="border-light header">
                 <UserCard
                   title={
-                    this.state.userInfo ? this.state.userInfo.firstName : ''
+                    this.props.profileData ? (
+                      cookies.get('userInfo') &&
+                      cookies.get('userInfo').role === '2' ? (
+                        <p className="d-flex flex-column flex-wrap justify-content-center">
+                          <span className="text-center">
+                            {this.props.profileData[0].fldName}
+                          </span>
+                          <span className="text-center py-1">
+                            سهم از فروش :{' '}
+                            {this.props.profileData[0].fldPercentage}%
+                          </span>
+                          <span className="text-center">
+                            تاریخ عضویت :{' '}
+                            {this.props.profileData[0].registerDate}
+                          </span>
+                        </p>
+                      ) : (
+                        this.props.profileData[0].fldName
+                      )
+                    ) : (
+                      ''
+                    )
                   }
                   className="border-light bg-light"
                   style={{ backgroundColor: 'lightblue !important' }}
                 >
                   <ListGroup className="custom_profile_border" flush>
+                    {cookies.get('userInfo') &&
+                    cookies.get('userInfo').role === '2' ? (
+                      <ListGroupItem
+                        tag="button"
+                        action
+                        className="border-bottom bg-light text-center rounded-0"
+                        onClick={this.toggle}
+                      >
+                        <AccountCircleIcon style={{ fontSize: '17px' }} />{' '}
+                        پروفایل
+                      </ListGroupItem>
+                    ) : null}
                     <ListGroupItem
                       tag="button"
                       action
@@ -192,6 +310,13 @@ class Header extends React.Component {
             </Popover>
           </NavItem>
         </Nav>
+        <ProfileModal
+          isOpen={this.state.modal}
+          toggle={this.toggle}
+          getProfileModal={this.getProfileModal}
+          loadProfile={this.props.profileData}
+          getProfile={this.props.loadProfile}
+        />
       </Navbar>
     );
   }
@@ -200,7 +325,36 @@ class Header extends React.Component {
 const mapDispatchtoProps = dispatch => {
   return {
     logOut: () => dispatch(userActions.logout()),
+    loadNotifications: id => dispatch(apiActions.loadNotifications(id)),
+    SeenNotifications: () => dispatch(apiActions.SeenNotifications()),
+    NotificationCount: () => dispatch(apiActions.NotificationCount()),
+    deleteNotification: id => dispatch(apiActions.deleteNotification(id)),
+    loadProfile: () => dispatch(apiActions.loadProfile()),
+    updateProfile: (
+      Name,
+      LastName,
+      Email,
+      Password,
+      PhoneNumber,
+      BankAccountNumber,
+    ) =>
+      dispatch(
+        apiActions.updateProfile(
+          Name,
+          LastName,
+          Email,
+          Password,
+          PhoneNumber,
+          BankAccountNumber,
+        ),
+      ),
   };
 };
-
-export default withRouter(connect(null, mapDispatchtoProps)(Header));
+function mapStateToProps(state) {
+  return {
+    loadNotificationsData: state.api.loadNotifications,
+    notificationsCount: state.api.notificationsCount,
+    profileData: state.api.loadProfile,
+  };
+}
+export default withRouter(connect(mapStateToProps, mapDispatchtoProps)(Header));

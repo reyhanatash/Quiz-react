@@ -43,6 +43,12 @@ export const apiActions = {
   demoTopic,
   loadTopicSetting,
   TestBookSetting,
+  loadNotifications,
+  SeenNotifications,
+  NotificationCount,
+  deleteNotification,
+  loadProfile,
+  updateProfile,
 };
 
 let url;
@@ -69,7 +75,7 @@ function getDashboard() {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           // dispatch(apiLoad(response.data.data));
           dispatch({
             type: allConstants.API_LOAD,
@@ -82,6 +88,7 @@ function getDashboard() {
       .catch(error => dispatch(failure(error)));
 
     function request(user) {
+      dispatch(NotificationCount());
       return { type: allConstants.LOAD_DASHBOARD_REQUEST, user };
     }
     function failure(error) {
@@ -101,7 +108,7 @@ function loadAllBooks() {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstants.LOAD_BOOKS,
             data: response.data.data,
@@ -132,7 +139,7 @@ function loadMajor() {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstants.MAJOR_LOAD,
             data: response.data.data,
@@ -163,7 +170,7 @@ function loadGrade() {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstants.GRADE_LOAD,
             data: response.data.data,
@@ -193,7 +200,7 @@ function loadGradeTestBook(id) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstants.GRADE_LOAD_TEST,
             data: response.data.data,
@@ -224,7 +231,7 @@ function loadTestBookChapter(id) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstants.TEST_BOOK_CHAPTER_LOAD,
             data: response.data.data,
@@ -255,7 +262,7 @@ function loadBookChapter(id) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstants.BOOK_CHAPTER_LOAD,
             data: response.data.data,
@@ -286,7 +293,7 @@ function loadBookChapterSearch(id) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstants.BOOK_CHAPTER_LOAD_SEARCH,
             data: response.data.data,
@@ -317,7 +324,7 @@ function loadBookChapterModal(id) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstants.BOOK_CHAPTER_LOAD_MODAL,
             data: response.data.data,
@@ -348,7 +355,7 @@ function editBookChapterModal(id) {
           },
         })
         .then(response => {
-          if (response.data.message === 'success') {
+          if (response.data.message.toLowerCase() === 'success') {
             dispatch({
               type: allConstants.EDIT_CHAPTER_LOAD_MODAL,
               data: response.data.data,
@@ -387,7 +394,7 @@ function loadHashtagTrend() {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstants.LOAD_HASHTAG_TREND,
             data: response.data.data,
@@ -438,7 +445,7 @@ function loadTest(
         },
       )
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstants.LOAD_TEST,
             data: response.data.data,
@@ -475,7 +482,7 @@ function loadAllTests(FkTestBook) {
         },
       )
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstants.LOAD_ALL_TESTS,
             data: response.data.data,
@@ -539,10 +546,10 @@ function addBook(
           if (response.data.data[0].message === 'Succeed') {
             alertify.success(response.data.data[0].showMessageToUser);
           }
-          if (response.data.data[0].message === 'Faild') {
+          if (response.data.data[0].message.toLowerCase() === 'faild') {
             alertify.error(response.data.data[0].showMessageToUser);
           }
-          if (response.data.data[0].message === 'Bug') {
+          if (response.data.data[0].message.toLowerCase() === 'bug') {
             alertify.error(response.data.data[0].showMessageToUser);
           }
           dispatch(success(response));
@@ -679,7 +686,7 @@ function InsertOrUpdateTestMaster(
               });
             }
           }
-          if (response.data.data[0].message === 'Faild') {
+          if (response.data.data[0].message.toLowerCase() === 'faild') {
             alertify.error(response.data.data[0].showMessageToUser);
           }
         }
@@ -712,7 +719,7 @@ function deleteBook(pkBook) {
         },
       )
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           alertify.success(response.data.data[0].showMessageToUser);
         } else {
           alertify.error(response.data.message);
@@ -747,7 +754,7 @@ function deleteTest(pkTestMaster) {
         },
       )
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           alertify.success(response.data.data[0].showMessageToUser);
         } else {
           alertify.error(response.data.message);
@@ -804,7 +811,7 @@ function loadSubBook(id) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstants.LOAD_SUB_BOOK,
             data: response.data.data,
@@ -883,7 +890,7 @@ function deleteSubBook(pkSubBookChapter) {
       )
       .then(response => {
         if (
-          response.data.message === 'success' &&
+          response.data.message.toLowerCase() === 'success' &&
           response.data.data[0].message !== 'Error'
         ) {
           alertify.success(response.data.data[0].showMessageToUser);
@@ -918,7 +925,7 @@ function loadTopic(id) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstants.LOAD_TOPIC,
             data: response.data.data,
@@ -997,7 +1004,7 @@ function deleteTopic(pkTopic) {
       )
       .then(response => {
         if (
-          response.data.message === 'success' &&
+          response.data.message.toLowerCase() === 'success' &&
           response.data.data[0].message !== 'Error'
         ) {
           alertify.success(response.data.data[0].showMessageToUser);
@@ -1042,7 +1049,7 @@ function uploadFile(Id, TestMasterId, name, type, size, base64) {
       )
       .then(response => {
         if (
-          response.data.message === 'success' &&
+          response.data.message.toLowerCase() === 'success' &&
           response.data.data[0].message !== 'Error'
         ) {
           dispatch({
@@ -1140,7 +1147,7 @@ function loadHashtagQuiz(testBook_id) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstants.LOAD_HASHTAG_QUIZ,
             data: response.data.data,
@@ -1194,8 +1201,8 @@ function InsertOrUpdateQuiz(
             dispatch(success(response.data.data));
             alertify.success(response.data.data[0].showMessageToUser);
           } else if (
-            response.data.data[0].message === 'Faild' ||
-            response.data.data[0].message === 'Bug'
+            response.data.data[0].message.toLowerCase() === 'faild' ||
+            response.data.data[0].message.toLowerCase() === 'bug'
           ) {
             alertify.error(response.data.data[0].showMessageToUser);
           }
@@ -1224,7 +1231,7 @@ function loadQuiz(testBookId) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstants.LOAD_QUIZ,
             data: response.data.data,
@@ -1267,11 +1274,11 @@ function deleteQuiz(pkQuiz) {
       )
       .then(response => {
         if (
-          response.data.message === 'success' &&
+          response.data.message.toLowerCase() === 'success' &&
           response.data.data[0].message !== 'Faild'
         ) {
           alertify.success(response.data.data[0].showMessageToUser);
-        } else if (response.data.data[0].message === 'Faild') {
+        } else if (response.data.data[0].message.toLowerCase() === 'faild') {
           alertify.error(response.data.data[0].showMessageToUser);
         } else {
           alertify.error(response.data.message);
@@ -1302,11 +1309,11 @@ function demoTopic(pkTopic) {
       )
       .then(response => {
         if (
-          response.data.message === 'success' &&
+          response.data.message.toLowerCase() === 'success' &&
           response.data.data[0].message !== 'Faild'
         ) {
           alertify.success(response.data.data[0].showMessageToUser);
-        } else if (response.data.data[0].message === 'Faild') {
+        } else if (response.data.data[0].message.toLowerCase() === 'faild') {
           alertify.error(response.data.data[0].showMessageToUser);
         } else {
           alertify.error(response.data.message);
@@ -1331,7 +1338,7 @@ function loadTopicSetting(testBookId) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstants.LOAD_TOPIC_SETTING,
             data: response.data.data,
@@ -1352,7 +1359,14 @@ function loadTopicSetting(testBookId) {
 }
 // Test Book Setting
 
-function TestBookSetting(TestBookId, TopicId, Duration, IsFinish) {
+function TestBookSetting(
+  TestBookId,
+  TopicId,
+  Duration,
+  IsFinish,
+  Coverbase64,
+  format,
+) {
   return dispatch => {
     dispatch(request());
     axios
@@ -1363,6 +1377,8 @@ function TestBookSetting(TestBookId, TopicId, Duration, IsFinish) {
           TopicId,
           Duration,
           IsFinish,
+          Coverbase64,
+          format,
         },
         {
           headers: {
@@ -1372,12 +1388,12 @@ function TestBookSetting(TestBookId, TopicId, Duration, IsFinish) {
         },
       )
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           if (response.data.data[0].message === 'Success') {
             alertify.success(response.data.data[0].showMessageToUser);
           } else if (
-            response.data.data[0].message === 'Faild' ||
-            response.data.data[0].message === 'Bug'
+            response.data.data[0].message.toLowerCase() === 'faild' ||
+            response.data.data[0].message.toLowerCase() === 'bug'
           ) {
             alertify.error(response.data.data[0].showMessageToUser);
           }
@@ -1392,6 +1408,203 @@ function TestBookSetting(TestBookId, TopicId, Duration, IsFinish) {
   };
 }
 
+// Load All Notifications
+function loadNotifications(testBookId) {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .get(url + `api/Book/LoadNotification/?${testBookId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + cookies.get('user'),
+        },
+      })
+      .then(response => {
+        if (response.data.message.toLowerCase() === 'success') {
+          dispatch({
+            type: allConstants.LOAD_NOTIFICATIONS,
+            data: response.data.data,
+          });
+        } else {
+          alertify.error(response.data.message);
+        }
+      })
+      .catch(error => dispatch(failure(error)));
+
+    function request(user) {
+      return { type: allConstants.LOAD_DASHBOARD_REQUEST, user };
+    }
+    function failure(error) {
+      return { type: allConstants.LOAD_DASHBOARD_FAILURE, error };
+    }
+  };
+}
+// Seen All Notifications
+function SeenNotifications() {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .post(url + 'api/Book/SeenNotification', '', {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + cookies.get('user'),
+        },
+      })
+      .then(response => {
+        if (response.data.message.toLowerCase() === 'success') {
+          dispatch({
+            type: allConstants.SEEN_NOTIFICATIONS,
+          });
+        } else {
+          alertify.error(response.data.message);
+        }
+      })
+      .catch(error => dispatch(failure(error)));
+
+    function request(user) {
+      return { type: allConstants.LOAD_DASHBOARD_REQUEST, user };
+    }
+    function failure(error) {
+      return { type: allConstants.LOAD_DASHBOARD_FAILURE, error };
+    }
+  };
+}
+
+// Get Count New Notifications
+function NotificationCount() {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .get(url + `api/Book/NotificationCount`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + cookies.get('user'),
+        },
+      })
+      .then(response => {
+        if (response.data.message.toLowerCase() === 'success') {
+          dispatch({
+            type: allConstants.NOTIFICATIONS_COUNT,
+            data: response.data.data,
+          });
+        } else {
+          alertify.error(response.data.message);
+        }
+      })
+      .catch(error => dispatch(failure(error)));
+
+    function request(user) {
+      return { type: allConstants.LOAD_DASHBOARD_REQUEST, user };
+    }
+    function failure(error) {
+      return { type: allConstants.LOAD_DASHBOARD_FAILURE, error };
+    }
+  };
+}
+// Delete Notification
+function deleteNotification(testBookId) {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .delete(url + `api/Book/NotificationDelete/${testBookId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + cookies.get('user'),
+        },
+      })
+      .then(response => {
+        if (response.data.message.toLowerCase() === 'success') {
+          dispatch({
+            type: allConstants.DELETE_NOTIFICATION,
+            data: response.data.data,
+          });
+        } else {
+          alertify.error(response.data.message);
+        }
+      });
+    function request(user) {
+      return { type: allConstants.LOAD_DASHBOARD_REQUEST, user };
+    }
+  };
+}
+// Load Profile
+function loadProfile() {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .get(url + `api/User/GetProfile`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + cookies.get('user'),
+        },
+      })
+      .then(response => {
+        if (response.data.message.toLowerCase() === 'success') {
+          dispatch({
+            type: allConstants.LOAD_PROFILE,
+            data: response.data.data,
+          });
+        } else {
+          alertify.error(response.data.message);
+        }
+      })
+      .catch(error => dispatch(failure(error)));
+
+    function request(user) {
+      return { type: allConstants.LOAD_DASHBOARD_REQUEST, user };
+    }
+    function failure(error) {
+      return { type: allConstants.LOAD_DASHBOARD_FAILURE, error };
+    }
+  };
+}
+// Update Profile
+function updateProfile(
+  Name,
+  LastName,
+  Email,
+  Password,
+  PhoneNumber,
+  BankAccountNumber,
+) {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .post(
+        url + 'api/User/UpdateProfile',
+        {
+          Name,
+          LastName,
+          Email,
+          Password,
+          PhoneNumber,
+          BankAccountNumber,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + cookies.get('user'),
+          },
+        },
+      )
+      .then(response => {
+        if (
+          response.data.message.toLowerCase() === 'success' &&
+          response.data.data[0].message !== 'Faild'
+        ) {
+          alertify.success(response.data.data[0].showMessageToUser);
+        } else if (response.data.data[0].message.toLowerCase() === 'faild') {
+          alertify.error(response.data.data[0].showMessageToUser);
+        } else {
+          alertify.error(response.data.message);
+        }
+      })
+      .catch(error => console.log(error));
+    function request(user) {
+      return { type: allConstants.LOAD_DASHBOARD_REQUEST, user };
+    }
+  };
+}
 function apiLoad(data) {
   return {
     type: allConstants.API_LOAD,

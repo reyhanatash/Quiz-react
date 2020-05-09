@@ -32,6 +32,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { useTheme } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 import SettingsIcon from '@material-ui/icons/Settings';
+import Preview from '../AddTestPage/FileUploadPreview';
 
 export default function EnhancedTable(props) {
   // Modal Confirm Delete
@@ -46,7 +47,17 @@ export default function EnhancedTable(props) {
   const handleClose = () => {
     setOpen(false);
   };
-
+  // Preview Cover
+  const [openCover, setOpenCover] = React.useState(false);
+  const [coverData, setCoverData] = React.useState(null);
+  const openCoverHandler = row => {
+    setCoverData(row);
+    setOpenCover(true);
+  };
+  const handleCloseCover = () => {
+    setOpenCover(false);
+    setCoverData(null);
+  };
   // Adding Rows
   let rows = [];
   if (props.newdata) {
@@ -59,6 +70,12 @@ export default function EnhancedTable(props) {
         description: data.testBookDiscription,
         countPurchased: data.countPurchased,
         price: data.fldPrice,
+        // percentage: data.fldPercentage,
+        isApprove: data.fldIsApprove,
+        archiveDate: data.fldArchiveDate,
+        rejectType: data.fldNameRejectType,
+        rejectComment: data.fLdComment,
+        cover: data.fldCoverAddress,
       });
     });
   }
@@ -91,8 +108,10 @@ export default function EnhancedTable(props) {
   // Head Rows
   const headCells = [
     { id: 'id-books', numeric: true, label: 'عملیات' },
-    { id: 'price', numeric: true, label: 'قیمت' },
+    // { id: 'percentage', numeric: true, label: 'درصد سهم' },
+    { id: 'isApprove', numeric: true, label: 'وضعیت' },
     { id: 'countPurchased', numeric: true, label: 'تعداد فروش' },
+    { id: 'price', numeric: true, label: 'قیمت' },
     { id: 'numTest', numeric: true, label: 'تعداد تست ها' },
     { id: 'numChapter', numeric: true, label: 'تعداد فصل ها' },
     { id: 'id', numeric: false, label: 'نام کتاب' },
@@ -322,7 +341,7 @@ export default function EnhancedTable(props) {
           <EnhancedTableToolbar numSelected={selected.length} />
           <div className={classes.tableWrapper}>
             <Table
-              className={classes.table + ' table-teacher'}
+              className={classes.table + ' dashboard-teacher'}
               aria-labelledby="tableTitle"
               size={dense ? 'small' : 'medium'}
             >
@@ -416,15 +435,75 @@ export default function EnhancedTable(props) {
                             </IconButton>
                           </Tooltip>
                         </TableCell>
-                        <TableCell
+                        {/* <TableCell
                           component="th"
                           id={labelId}
                           scope="row"
                           padding="none"
                           className="direction-right"
                         >
-                          {row.price} ریال
+                          {row.percentage} %
+                        </TableCell> */}
+                        <TableCell align="right">
+                          <Tooltip
+                            className=""
+                            title={
+                              (row.isApprove === 1 &&
+                                row.archiveDate === null) ||
+                              (row.isApprove === 1 &&
+                                row.archiveDate === '') ? (
+                                <p className="tooltip-table">
+                                  کتاب تایید شده است و فعال میباشد
+                                </p>
+                              ) : (row.isApprove === 0 &&
+                                  row.archiveDate === null) ||
+                                (row.isApprove === 0 &&
+                                  row.archiveDate === '') ? (
+                                <p className="tooltip-table">
+                                  کتاب بدلیل {row.rejectType} نامناسب تایید نشده
+                                  توضیحات عدم تایید : {row.rejectComment}
+                                </p>
+                              ) : (row.isApprove === 1 &&
+                                  row.archiveDate !== null) ||
+                                (row.isApprove === 1 &&
+                                  row.archiveDate !== '') ? (
+                                <p className="tooltip-table">
+                                  کتاب غیر فعال میباشد و در تاریخ{' '}
+                                  {row.archiveDate} بایگانی شده است
+                                </p>
+                              ) : (
+                                <p className="tooltip-table">
+                                  کتاب تا اکنون مورد بررسی قرار نگرفته است
+                                </p>
+                              )
+                            }
+                          >
+                            {(row.isApprove === 1 &&
+                              row.archiveDate === null) ||
+                            (row.isApprove === 1 && row.archiveDate === '') ? (
+                              <span className="cursor-pointer text-success">
+                                تایید شده
+                              </span>
+                            ) : (row.isApprove === 0 &&
+                                row.archiveDate === null) ||
+                              (row.isApprove === 0 &&
+                                row.archiveDate === '') ? (
+                              <span className="cursor-pointer text-secondary">
+                                تایید نشده
+                              </span>
+                            ) : (row.isApprove === 1 &&
+                                row.archiveDate !== null) ||
+                              (row.isApprove === 1 &&
+                                row.archiveDate !== '') ? (
+                              <span className="cursor-pointer text-warning">
+                                بایگانی شده
+                              </span>
+                            ) : (
+                              <span className="cursor-pointer">مشخص نشده</span>
+                            )}
+                          </Tooltip>
                         </TableCell>
+
                         <TableCell
                           component="th"
                           id={labelId}
@@ -438,11 +517,21 @@ export default function EnhancedTable(props) {
                           id={labelId}
                           scope="row"
                           padding="none"
+                          className="direction-right"
+                        >
+                          {row.price} ریال
+                        </TableCell>
+
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
                         >
                           {row.numTest}
                         </TableCell>
                         <TableCell align="right">{row.numChapter}</TableCell>
-                        <TableCell align="right">
+                        <TableCell align="right" className="position-relative">
                           <span
                             style={{
                               display: 'inline-block',
@@ -453,6 +542,7 @@ export default function EnhancedTable(props) {
                           </span>
                           <Tooltip
                             className="table-icon-info"
+                            style={{ marginRight: '15px' }}
                             title={
                               <p className="tooltip-table">
                                 {row.description
@@ -469,6 +559,14 @@ export default function EnhancedTable(props) {
                               <InfoIcon />
                             </IconButton>
                           </Tooltip>
+                          {row.cover ? (
+                            <img
+                              className="img-fluid cover-table cursor-pointer"
+                              src={row.cover}
+                              alt={row.name}
+                              onClick={() => openCoverHandler(row)}
+                            />
+                          ) : null}
                         </TableCell>
                       </TableRow>
                     );
@@ -542,6 +640,14 @@ export default function EnhancedTable(props) {
           </DialogActions>
         </Dialog>
       </div>
+      {/* Preview Cover */}
+      <Preview
+        handleClose={handleCloseCover}
+        open={openCover}
+        name={coverData ? coverData.name : null}
+        base64data={coverData ? coverData.cover : null}
+        fileType={'image'}
+      />
     </>
   );
 }

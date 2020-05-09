@@ -37,6 +37,7 @@ export default function EnhancedTable(props) {
         phone: data.fldPhoneNo,
         // type: data.fldFkTypeCo,
         isActive: data.fldActive,
+        Percentage: data.fldPercentage,
       });
     });
   }
@@ -78,6 +79,11 @@ export default function EnhancedTable(props) {
   const headCells = [
     { id: 'id-books', numeric: true, label: 'عملیات' },
 
+    {
+      id: 'Percentage',
+      numeric: true,
+      label: 'درصد سهم',
+    },
     {
       id: 'isAvtive',
       numeric: true,
@@ -243,7 +249,7 @@ export default function EnhancedTable(props) {
   }));
   const classes = useStyles();
   const [order, setOrder] = React.useState('desc');
-  const [orderBy, setOrderBy] = React.useState('name');
+  const [orderBy, setOrderBy] = React.useState('id');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -402,6 +408,7 @@ export default function EnhancedTable(props) {
                           </IconButton>
                         </Tooltip> */}
                       </TableCell>
+                      <TableCell align="right">{row.Percentage}%</TableCell>
                       <TableCell
                         component="th"
                         id={labelId}

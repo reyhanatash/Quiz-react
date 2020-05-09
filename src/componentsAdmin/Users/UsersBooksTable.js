@@ -33,7 +33,11 @@ export default function EnhancedTable(props) {
         maxPercent: data.maxPercent,
         minPercent: data.minPercent,
         allTestCount: data.countAllTest,
-        date: data.dateShamsi,
+        date: data.logDate,
+        price: data.fldPrice,
+        discount: data.fldDiscountCode,
+        purchaseDate: data.fldPurchaseDate,
+        discountPrice: data.fldDiscountPrice,
       });
     });
   }
@@ -73,27 +77,32 @@ export default function EnhancedTable(props) {
   }
   // Head Rows
   const headCells = [
-    {
-      id: 'averagePercent',
-      numeric: true,
-      label: 'حداقل درصد',
-    },
-    {
-      id: 'averagePercent',
-      numeric: true,
-      label: 'حداکثر درصد',
-    },
-    {
-      id: 'averagePercent',
-      numeric: true,
-      label: 'میانگین درصد ',
-    },
+    { id: 'discount', numeric: false, label: 'کد تخفیف ' },
+    { id: 'discountPrice', numeric: false, label: 'مبلغ تخفیف' },
+    { id: 'purchaseDate', numeric: false, label: 'تاریخ خرید ' },
+    { id: 'price', numeric: false, label: 'قیمت خرید ' },
+    // {
+    //   id: 'averagePercent',
+    //   numeric: true,
+    //   label: 'میانگین درصد ',
+    // },
+
+    // {
+    //   id: 'averagePercent',
+    //   numeric: true,
+    //   label: 'حداکثر درصد',
+    // },
+    // {
+    //   id: 'averagePercent',
+    //   numeric: true,
+    //   label: 'حداقل درصد',
+    // },
     {
       id: 'averagePercent',
       numeric: true,
       label: 'تعداد تست ها',
     },
-    { id: 'desc', numeric: false, label: 'توضیحات ' },
+    // { id: 'desc', numeric: false, label: 'توضیحات ' },
     { id: 'author', numeric: false, label: 'نویسنده' },
     { id: 'name', numeric: false, label: 'نام ' },
   ];
@@ -314,7 +323,7 @@ export default function EnhancedTable(props) {
         <EnhancedTableToolbar numSelected={selected.length} />
         <div className={classes.tableWrapper}>
           <Table
-            className={classes.table + ' table-student'}
+            className={classes.table + ' table-student-books'}
             aria-labelledby="tableTitle"
             size={dense ? 'small' : 'medium'}
           >
@@ -369,14 +378,29 @@ export default function EnhancedTable(props) {
                           </IconButton>
                         </Tooltip>
                       </TableCell> */}
-                      <TableCell
+                      <TableCell align="right">
+                        {row.discount && row.discount !== ''
+                          ? row.discount
+                          : 'ندارد'}
+                      </TableCell>
+                      <TableCell align="right" className="direction-right">
+                        {row.discountPrice
+                          ? row.discountPrice + ' ریال'
+                          : 'ندارد'}
+                      </TableCell>
+                      <TableCell align="right">{row.purchaseDate}</TableCell>
+                      <TableCell align="right" className="direction-right">
+                        {row.price} ریال
+                      </TableCell>
+                      {/* <TableCell
                         component="th"
                         id={labelId}
                         scope="row"
                         padding="none"
                       >
-                        {row.minPercent}
+                        {row.averagePercent}
                       </TableCell>
+
                       <TableCell
                         component="th"
                         id={labelId}
@@ -391,8 +415,8 @@ export default function EnhancedTable(props) {
                         scope="row"
                         padding="none"
                       >
-                        {row.averagePercent}
-                      </TableCell>
+                        {row.minPercent}
+                      </TableCell> */}
                       <TableCell
                         component="th"
                         id={labelId}
@@ -429,7 +453,7 @@ export default function EnhancedTable(props) {
                       >
                         {row.desc}
                       </TableCell> */}
-                      <TableCell
+                      {/* <TableCell
                         component="th"
                         id={labelId}
                         scope="row"
@@ -438,7 +462,7 @@ export default function EnhancedTable(props) {
                         {row.desc && row.desc.length > 70
                           ? '...' + row.desc.slice(0, 70)
                           : row.desc}
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell align="right">{row.author}</TableCell>
                       <TableCell align="right">{row.name}</TableCell>
                     </TableRow>
@@ -446,7 +470,7 @@ export default function EnhancedTable(props) {
                 })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                  <TableCell colSpan={7} />
+                  <TableCell colSpan={10} />
                 </TableRow>
               )}
             </TableBody>

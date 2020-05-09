@@ -18,6 +18,10 @@ export const apiActionsAdmin = {
   insertOrUpdateTeacher,
   loadUserQuiz,
   setArchiveTestBook,
+  selectedFilterChapter,
+  updatePrice,
+  updatePercentage,
+  publishToWordpress,
 };
 let url;
 // if (
@@ -45,7 +49,7 @@ function getDashboard() {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsAdmin.LOAD_DASHBOARD,
             data: response.data.data,
@@ -76,7 +80,7 @@ function loadUsers(type) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsAdmin.LOAD_USERS,
             data: response.data.data,
@@ -107,7 +111,7 @@ function loadTestBook() {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsAdmin.LOAD_TEST_BOOKS,
             data: response.data.data,
@@ -138,7 +142,7 @@ function loadTestBookReadyToPublish() {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsAdmin.LOAD_TEST_BOOKS_READY_TO_PUBLISH,
             data: response.data.data,
@@ -169,7 +173,7 @@ function loadTestBookSold() {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsAdmin.LOAD_TEST_BOOKS_SOLD,
             data: response.data.data,
@@ -200,7 +204,7 @@ function loadBooksPerUser(userId) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsAdmin.LOAD_USER_BOOKS,
             data: response.data.data,
@@ -239,7 +243,7 @@ function ChangeActiveTeacher(UserId, Status) {
       )
       .then(response => {
         if (response.status === 200) {
-          if (response.data.message === 'success') {
+          if (response.data.message.toLowerCase() === 'success') {
             alertify.success(response.data.data[0].showMessageToUser);
             // dispatch({
             //   type: allConstantsAdmin.CHANGE_ACTIVE_TEACHER,
@@ -276,7 +280,7 @@ function loadTestList(TestBookId, TestBookChapterId) {
         },
       )
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsAdmin.LOAD_TEST_LIST,
             data: response.data.data,
@@ -307,7 +311,7 @@ function loadRejectTypes() {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsAdmin.LOAD_REJECT_TYPES,
             data: response.data.data,
@@ -348,7 +352,7 @@ function approveOrRejectTestBook(TestBookId, RejectType, IsApprove, Comment) {
       )
       .then(response => {
         if (response.status === 200) {
-          if (response.data.message === 'success') {
+          if (response.data.message.toLowerCase() === 'success') {
             alertify.success(response.data.data[0].showMessageToUser);
           } else {
             alertify.error(response.data.data[0].showMessageToUser);
@@ -372,6 +376,7 @@ function insertOrUpdateTeacher(
   Password,
   TypeCo,
   PhoneNo,
+  Percentage,
 ) {
   return dispatch => {
     dispatch(request());
@@ -387,6 +392,7 @@ function insertOrUpdateTeacher(
           Password: Password,
           TypeCo: 2,
           PhoneNo: PhoneNo,
+          Percentage: Percentage,
         },
         {
           headers: {
@@ -397,7 +403,7 @@ function insertOrUpdateTeacher(
       )
       .then(response => {
         if (response.status === 200) {
-          if (response.data.message === 'success') {
+          if (response.data.message.toLowerCase() === 'success') {
             alertify.success(response.data.data[0].showMessageToUser);
           } else {
             alertify.error(response.data.data[0].showMessageToUser);
@@ -423,7 +429,7 @@ function loadUserQuiz(testbookId) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsAdmin.LOAD_USER_QUIZ,
             data: response.data.data,
@@ -443,14 +449,15 @@ function loadUserQuiz(testbookId) {
   };
 }
 // Archive TestBook
-function setArchiveTestBook(TestBookId) {
+function setArchiveTestBook(TestBookId, IsArchive) {
   return dispatch => {
     dispatch(request());
     axios
       .post(
-        url + 'api/Book/SetArchiveTestBook',
+        url + 'api/Book/SetArchive',
         {
           TestBookId,
+          IsArchive,
         },
         {
           headers: {
@@ -461,7 +468,7 @@ function setArchiveTestBook(TestBookId) {
       )
       .then(response => {
         if (response.status === 200) {
-          if (response.data.message === 'success') {
+          if (response.data.message.toLowerCase() === 'success') {
             alertify.success(response.data.data[0].showMessageToUser);
           } else {
             alertify.error(response.data.data[0].showMessageToUser);
@@ -474,4 +481,118 @@ function setArchiveTestBook(TestBookId) {
       return { type: allConstantsAdmin.LOAD_DASHBOARD_REQUEST, response };
     }
   };
+}
+// Update Price TestBook
+function updatePrice(TestBookId, price) {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .patch(
+        url + `api/Book/UpdatePrice/${TestBookId}`,
+        {
+          Price: price,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + cookies.get('user'),
+          },
+        },
+      )
+      .then(response => {
+        if (response.status === 200) {
+          if (response.data.message.toLowerCase() === 'success') {
+            alertify.success(response.data.data[0].showMessageToUser);
+          } else {
+            alertify.error(response.data.data[0].showMessageToUser);
+          }
+        }
+      })
+      .catch(error => console.log(error));
+
+    function request(response) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_REQUEST, response };
+    }
+  };
+}
+// Update Percent TestBook
+function updatePercentage(TestBookId, percent) {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .patch(
+        url + `api/Book/updatePercent/${TestBookId}`,
+        {
+          Percent: percent,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + cookies.get('user'),
+          },
+        },
+      )
+      .then(response => {
+        if (response.status === 200) {
+          if (response.data.message.toLowerCase() === 'success') {
+            alertify.success(response.data.data[0].showMessageToUser);
+          } else {
+            alertify.error(response.data.data[0].showMessageToUser);
+          }
+        }
+      })
+      .catch(error => console.log(error));
+
+    function request(response) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_REQUEST, response };
+    }
+  };
+}
+// Publish Testbook to WordPress
+function publishToWordpress(
+  Id,
+  Title,
+  Category,
+  Description,
+  ShortDescription,
+  Price,
+  Image,
+) {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .post(
+        url + 'api/Book/PublishBook',
+        {
+          Id,
+          Title,
+          Category,
+          Description,
+          ShortDescription,
+          Price,
+          Image,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + cookies.get('user'),
+          },
+        },
+      )
+      .then(response => {
+        if (response.status === 200) {
+          console.log(response);
+        }
+      })
+      .catch(error => console.log(error));
+
+    function request(response) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_REQUEST, response };
+    }
+  };
+}
+
+// Defualt value for filter in view test admin
+function selectedFilterChapter(data) {
+  return { type: allConstantsAdmin.SELECTED_CHAPTER, data };
 }

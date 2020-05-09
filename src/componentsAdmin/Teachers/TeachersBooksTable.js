@@ -27,6 +27,10 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import DoneIcon from '@material-ui/icons/Done';
 import ClearIcon from '@material-ui/icons/Clear';
+import alertify from 'alertifyjs';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+
 export default function EnhancedTable(props) {
   const [title, settitle] = React.useState(props.title);
   // Adding Rows
@@ -44,6 +48,8 @@ export default function EnhancedTable(props) {
         price: data.fldPrice,
         isFinish: data.fldIsFinish,
         archiveDate: data.fldArchiveDate,
+        percentage: data.fldPercentage,
+        cover: data.fldCoverAddress,
       });
     });
   }
@@ -78,6 +84,62 @@ export default function EnhancedTable(props) {
     console.log(newValue);
     setValueTabs(newValue);
   };
+  // Price Handler
+  const [dataPrice, setdataPrice] = React.useState({});
+  const [anchorElPrice, setAnchorElPrice] = React.useState(null);
+  const handleClickPrice = (event, data) => {
+    setdataPrice(data);
+    setAnchorElPrice(anchorElPrice ? null : event.currentTarget);
+  };
+  const openPrice = Boolean(anchorElPrice);
+  const idPrice = openPrice ? 'transitions-popper' : undefined;
+  const handleClosePrice = () => {
+    setAnchorElPrice(null);
+    setdataPrice({});
+    setPrice(null);
+  };
+  const [price, setPrice] = React.useState(null);
+  const priceHandler = e => {
+    setPrice(e.currentTarget.value);
+  };
+
+  // Percentage Handler
+  const [dataPercent, setdataPercent] = React.useState({});
+  const [anchorElPercent, setAnchorElPercent] = React.useState(null);
+  const handleClickPercent = (event, data) => {
+    setdataPercent(data);
+    setAnchorElPercent(anchorElPercent ? null : event.currentTarget);
+  };
+  const openPercent = Boolean(anchorElPercent);
+  const idPercent = openPercent ? 'transitions-popper' : undefined;
+  const handleClosePercent = () => {
+    setAnchorElPercent(null);
+    setdataPercent({});
+    setPercent(null);
+  };
+  const [percent, setPercent] = React.useState(null);
+  const percentHandler = e => {
+    setPercent(e.currentTarget.value);
+  };
+  // Archive Handler
+  const [dataArchive, setdataArchive] = React.useState({});
+  const [anchorElArchive, setAnchorElArchive] = React.useState(null);
+  const handleClickArchive = (event, data) => {
+    setdataArchive(data);
+    setAnchorElArchive(anchorElArchive ? null : event.currentTarget);
+  };
+  const openArchive = Boolean(anchorElArchive);
+  const idArchive = openArchive ? 'transitions-popper' : undefined;
+  const handleCloseArchive = () => {
+    setAnchorElArchive(null);
+    setdataArchive({});
+    setArchive(null);
+  };
+  const [archive, setArchive] = React.useState(null);
+  const archiveHandler = e => {
+    setArchive(e.currentTarget.value);
+  };
+
   function desc(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
       return -1;
@@ -104,26 +166,43 @@ export default function EnhancedTable(props) {
       : (a, b) => -desc(a, b, orderBy);
   }
   // Head Rows
-  const headCells = [
+  let headCells = [
     { id: 'id-books', numeric: true, label: 'عملیات' },
-
+    {
+      id: 'archiveDate',
+      numeric: true,
+      label: 'تاریخ بایگانی',
+    },
     {
       id: 'Approve',
       numeric: true,
       label: 'وضعیت',
     },
-    {
-      id: 'Approve',
-      numeric: true,
-      label: 'تاریخ بایگانی',
-    },
-    { id: 'price', numeric: false, label: 'قیمت ' },
+
+    { id: 'percentage', numeric: true, label: 'درصد سهم ' },
+    { id: 'price', numeric: true, label: 'قیمت ' },
     // { id: 'phone', numeric: true, label: 'شماره تماس ' },
     { id: 'desc', numeric: false, label: 'توضیحات ' },
     { id: 'author', numeric: false, label: 'نویسنده ' },
     { id: 'name', numeric: false, label: 'نام ' },
   ];
+  if (props.title === 'لیست کتاب های آماده انتشار') {
+    headCells = [
+      { id: 'id-books', numeric: true, label: 'عملیات' },
+      {
+        id: 'Approve',
+        numeric: true,
+        label: 'وضعیت',
+      },
 
+      { id: 'percentage', numeric: true, label: 'درصد سهم ' },
+      { id: 'price', numeric: true, label: 'قیمت ' },
+      // { id: 'phone', numeric: true, label: 'شماره تماس ' },
+      { id: 'desc', numeric: false, label: 'توضیحات ' },
+      { id: 'author', numeric: false, label: 'نویسنده ' },
+      { id: 'name', numeric: false, label: 'نام ' },
+    ];
+  }
   function EnhancedTableHead(props) {
     const {
       classes,
@@ -418,11 +497,94 @@ export default function EnhancedTable(props) {
                           </IconButton>
                         </Tooltip>
                       </TableCell>
+                      {props.title !== 'لیست کتاب های آماده انتشار' ? (
+                        <TableCell align="right">
+                          {row.archiveDate !== ''
+                            ? row.archiveDate
+                            : 'بایگانی نشده'}
+                          <Tooltip
+                            className="table-icon-edit"
+                            title={
+                              <span style={{ fontSize: '12px' }}>
+                                تغییر بایگانی
+                              </span>
+                            }
+                          >
+                            <IconButton
+                              aria-label="delete"
+                              onClick={event => handleClickArchive(event, row)}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+
+                          <Popover
+                            key={row.id}
+                            id={idArchive}
+                            open={openArchive}
+                            anchorEl={anchorElArchive}
+                            onClose={handleCloseArchive}
+                            anchorOrigin={{
+                              vertical: 'bottom',
+                              horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                              vertical: 'top',
+                              horizontal: 'center',
+                            }}
+                            className="archive-wrapper"
+                          >
+                            <h5
+                              style={{
+                                fontSize: '19px',
+                                color: 'black',
+                                margin: '10px 0',
+                              }}
+                            >
+                              {dataArchive.name}
+                            </h5>
+                            <FormGroup className="d-flex flex-column justify-content-start mb-2">
+                              <FormControlLabel
+                                className="direction-right d-flex flex-row-reverse m-auto"
+                                control={
+                                  <Checkbox
+                                    defaultChecked={
+                                      dataArchive.archiveDate !== ''
+                                        ? true
+                                        : false
+                                    }
+                                    onChange={archiveHandler}
+                                    value={
+                                      dataArchive.archiveDate !== ''
+                                        ? ''
+                                        : 'checkedComplete'
+                                    }
+                                    color="primary"
+                                  />
+                                }
+                                label="بایگانی کردن کتاب"
+                              />
+                              <Button
+                                onClick={() => {
+                                  props.updateArchive(dataArchive.id, archive);
+                                  handleCloseArchive();
+                                }}
+                                color="outline-primary"
+                                autoFocus
+                                className="rounded col-md-12 col-sm-12 mt-3"
+                              >
+                                ذخیره
+                              </Button>
+                            </FormGroup>
+                          </Popover>
+                        </TableCell>
+                      ) : null}
                       <TableCell
                         component="th"
                         id={labelId}
                         scope="row"
                         padding="none"
+                        className="px-2"
                       >
                         {row.Approve === true ? (
                           <span className="text-success">تایید شده</span>
@@ -497,40 +659,14 @@ export default function EnhancedTable(props) {
                             </Tabs>
                           </Paper>
                           <FormGroup className="d-flex flex-column col-12 p-0 flex-wrap pb-3 pt-4">
-                            <Label for="hashtag" className="ml-auto">
-                              توضیحات عدم تایید
-                            </Label>
-                            <Input
-                              className="direction-right col-12 form-control desc-quiz"
-                              type="textarea"
-                              name="text"
-                              id="exampleText"
-                              placeholder="عدم..."
-                              disabled={
-                                valueTabs === null && data.Approve === false
-                                  ? false
-                                  : valueTabs === null && data.Approve === true
-                                  ? true
-                                  : valueTabs === 0
-                                  ? true
-                                  : false
-                              }
-                              onChange={commentHandler}
-                              defaultValue={
-                                data.rejectComment &&
-                                data.rejectComment !== null
-                                  ? data.rejectComment
-                                  : null
-                              }
-                            />
                             <Label
                               for="hashtag"
-                              className="ml-auto mt-3"
+                              className="ml-auto mt-2"
                               style={{ marginBottom: '-12px' }}
                             >
                               گزینه های عدم تایید
                             </Label>
-                            <FormGroup check inline className="mr-0 mt-2">
+                            <FormGroup check inline className="mr-0 ">
                               {props.loadRejectTypes
                                 ? props.loadRejectTypes.map(type => {
                                     return (
@@ -570,6 +706,32 @@ export default function EnhancedTable(props) {
                                   })
                                 : null}
                             </FormGroup>
+                            <Label for="hashtag" className="ml-auto">
+                              توضیحات عدم تایید
+                            </Label>
+                            <Input
+                              className="direction-right col-12 form-control desc-quiz mb-3"
+                              type="textarea"
+                              name="text"
+                              id="exampleText"
+                              placeholder="عدم..."
+                              disabled={
+                                valueTabs === null && data.Approve === false
+                                  ? false
+                                  : valueTabs === null && data.Approve === true
+                                  ? true
+                                  : valueTabs === 0
+                                  ? true
+                                  : false
+                              }
+                              onChange={commentHandler}
+                              defaultValue={
+                                data.rejectComment &&
+                                data.rejectComment !== null
+                                  ? data.rejectComment
+                                  : null
+                              }
+                            />
                             <Button
                               onClick={() => {
                                 props.approveOrRejectTestBook(
@@ -577,6 +739,7 @@ export default function EnhancedTable(props) {
                                   valueTabs,
                                   comment,
                                   rejectType,
+                                  data,
                                 );
                                 handleClose();
                               }}
@@ -589,14 +752,167 @@ export default function EnhancedTable(props) {
                           </FormGroup>
                         </Popover>
                       </TableCell>
-                      <TableCell align="right">
-                        {row.archiveDate !== ''
-                          ? row.archiveDate
-                          : 'بایگانی نشده'}
+
+                      <TableCell>
+                        {' '}
+                        {row.percentage}%
+                        <Tooltip
+                          className="table-icon-edit"
+                          title={
+                            <span style={{ fontSize: '12px' }}>تغییر درصد</span>
+                          }
+                        >
+                          <IconButton
+                            aria-label="delete"
+                            onClick={event => handleClickPercent(event, row)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                        </Tooltip>
+                        {/* popover */}
+                        <Popover
+                          key={row.id}
+                          id={idPercent}
+                          open={openPercent}
+                          anchorEl={anchorElPercent}
+                          onClose={handleClosePercent}
+                          anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                          }}
+                          transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                          }}
+                          className="percentage-wrapper"
+                        >
+                          <h5
+                            style={{
+                              fontSize: '17px',
+                              color: 'black',
+                              margin: '10px 0',
+                            }}
+                          >
+                            {dataPercent.name}
+                          </h5>
+                          <FormGroup className="d-flex flex-column mb-2">
+                            <Label
+                              for="text"
+                              className="ml-auto custom-select-react-label my-1"
+                            >
+                              درصد جدید
+                            </Label>
+                            <div className="d-flex align-items-center  my-2">
+                              <span>%</span>{' '}
+                              <Input
+                                type="number"
+                                name="Percentage"
+                                id="Percentage"
+                                placeholder="56"
+                                className="text-center col-9"
+                                onChange={percentHandler}
+                              />
+                            </div>
+                            <Button
+                              onClick={() => {
+                                if (
+                                  Number(percent) < 0 ||
+                                  Number(percent) > 100
+                                ) {
+                                  alertify.error('درصد باید بین 0 - 100 باشد');
+                                  return;
+                                }
+                                props.updatePercentage(dataPercent.id, percent);
+                                handleClosePercent();
+                              }}
+                              color="outline-primary"
+                              autoFocus
+                              className="rounded col-md-12 col-sm-12 mt-3"
+                            >
+                              ذخیره
+                            </Button>
+                          </FormGroup>
+                        </Popover>
                       </TableCell>
-                      <TableCell align="right" className="direction-right">
+                      <TableCell>
                         {' '}
                         {row.price} ریال
+                        <Tooltip
+                          className="table-icon-edit"
+                          title={
+                            <span style={{ fontSize: '12px' }}>تغییر قیمت</span>
+                          }
+                        >
+                          <IconButton
+                            aria-label="delete"
+                            onClick={event => handleClickPrice(event, row)}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                        </Tooltip>
+                        {/* popover */}
+                        <Popover
+                          key={row.id}
+                          id={idPrice}
+                          open={openPrice}
+                          anchorEl={anchorElPrice}
+                          onClose={handleClosePrice}
+                          anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                          }}
+                          transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                          }}
+                        >
+                          <h5
+                            style={{
+                              fontSize: '18px',
+                              color: 'black',
+                              margin: '10px 0',
+                            }}
+                          >
+                            {dataPrice.name}
+                          </h5>
+                          <FormGroup className="d-flex flex-column mb-2">
+                            <Label
+                              for="text"
+                              className="ml-auto custom-select-react-label mb-2"
+                            >
+                              قیمت جدید
+                            </Label>
+                            <div className="d-flex align-items-center pl-1">
+                              <Input
+                                className="direction-right col-11 form-control"
+                                type="number"
+                                name="text"
+                                id="exampleText"
+                                placeholder=""
+                                onChange={priceHandler}
+                              />
+                              <span
+                                style={{
+                                  marginRight: '10px',
+                                  fontSize: '16px',
+                                }}
+                              >
+                                ریال
+                              </span>
+                            </div>
+                            <Button
+                              onClick={() => {
+                                props.updatePrice(dataPrice.id, price);
+                                handleClosePrice();
+                              }}
+                              color="outline-primary"
+                              autoFocus
+                              className="rounded col-md-3 col-sm-12 mt-3"
+                            >
+                              ذخیره
+                            </Button>
+                          </FormGroup>
+                        </Popover>
                       </TableCell>
                       <TableCell
                         component="th"
@@ -610,13 +926,31 @@ export default function EnhancedTable(props) {
                           : row.desc}
                       </TableCell>
                       <TableCell align="right">{row.author}</TableCell>
-                      <TableCell align="right">{row.name}</TableCell>
+                      <TableCell align="right" className="position-relative">
+                        {/* {row.name} */}
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            minWidth: '85px',
+                          }}
+                        >
+                          {row.name}
+                        </span>
+                        {row.cover ? (
+                          <img
+                            className="img-fluid cover-table cursor-pointer"
+                            src={row.cover}
+                            alt={row.name}
+                            // onClick={() => openCoverHandler(row)}
+                          />
+                        ) : null}
+                      </TableCell>
                     </TableRow>
                   );
                 })}
               {emptyRows > 0 && (
                 <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                  <TableCell colSpan={7} />
+                  <TableCell colSpan={9} />
                 </TableRow>
               )}
             </TableBody>

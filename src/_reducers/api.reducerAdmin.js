@@ -11,6 +11,7 @@ const initialState = [
     loadTestList: '',
     loadRejectTypes: '',
     loadUserQuiz: '',
+    selectedChapter: '',
   },
 ];
 export function apiAdmin(state = initialState, action) {
@@ -71,6 +72,11 @@ export function apiAdmin(state = initialState, action) {
       return {
         ...state,
         loadUserQuiz: action.data,
+      };
+    case allConstantsAdmin.SELECTED_CHAPTER:
+      return {
+        ...state,
+        selectedChapter: action.data,
       };
     default:
       return state;

@@ -152,6 +152,7 @@ class DashboardPage extends React.Component {
       fkTopic: data.fkTopic,
       randomeQuizDuration: data.randomeQuizDuration,
       isFinish: data.isFinish,
+      cover: data.fldCoverAddress,
     };
     setTimeout(() => {
       this.props.dispatch(apiActions.loadTopicSetting(id));
@@ -160,9 +161,23 @@ class DashboardPage extends React.Component {
     }, 10);
   };
   getSettingModal = getSettingModal => {
-    const { TestBookId, TopicId, Duration, IsFinish } = getSettingModal;
+    const {
+      TestBookId,
+      TopicId,
+      Duration,
+      IsFinish,
+      Coverbase64,
+      format,
+    } = getSettingModal;
     this.props.dispatch(
-      apiActions.TestBookSetting(TestBookId, TopicId, Duration, IsFinish),
+      apiActions.TestBookSetting(
+        TestBookId,
+        TopicId,
+        Duration,
+        IsFinish,
+        Coverbase64,
+        format,
+      ),
     );
   };
   render() {

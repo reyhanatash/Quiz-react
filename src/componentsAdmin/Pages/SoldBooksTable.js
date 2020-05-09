@@ -190,7 +190,7 @@ export default function EnhancedTable(props) {
             </Typography>
           ) : (
             <h5 id="tableTitle" className="h5 pr-3">
-              لیست کتاب کاربر
+              لیست کتاب های فروخته شده
             </h5>
           )}
         </div>

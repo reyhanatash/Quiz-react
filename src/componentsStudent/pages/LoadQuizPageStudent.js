@@ -24,7 +24,9 @@ class LoadQuizPageStudent extends Component {
       state: data,
     });
   };
-
+  componentWillUnmount() {
+    this.props.dispatch(apiActionsStudent.loadQuizDetails(0));
+  }
   render() {
     return (
       <Page className="CreateQuizPage" title="آزمون ها">
@@ -32,14 +34,20 @@ class LoadQuizPageStudent extends Component {
           {/* Show Created Quiz */}
           <Row className="px-3">
             {/* Quizes */}
-            <Col sm={12} md={12}>
-              <LoadQuiz
-                Quiz={this.props.Quiz}
-                selectQuiz={this.selectQuiz}
-                goToStartTest={this.goToStartTest}
-                TestBookId={this.props.location.state.id}
-              />
-            </Col>
+            {this.props.Quiz && this.props.Quiz.length > 1 ? (
+              <Col sm={12} md={12}>
+                <LoadQuiz
+                  Quiz={this.props.Quiz}
+                  selectQuiz={this.selectQuiz}
+                  goToStartTest={this.goToStartTest}
+                  TestBookId={this.props.location.state.id}
+                />
+              </Col>
+            ) : (
+              <Col className="d-flex align-items-center w-100 mt-5 mb-3">
+                <h3 className="m-0">فاقد آزمون میباشد !</h3>
+              </Col>
+            )}
           </Row>
           {/* Go TO CreatePageTest Button */}
           <Row className="px-3">

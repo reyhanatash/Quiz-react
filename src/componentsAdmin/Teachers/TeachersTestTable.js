@@ -341,7 +341,7 @@ export default function EnhancedTable(props) {
                             aria-label="Go to Test"
                             onClick={() =>
                               // props.openQuizModal(row.name, row.id, 2)
-                              props.goToViewTest(row.id, index + 1)
+                              props.goToViewTest(row.id, row.rowNumber)
                             }
                           >
                             <ListAltIcon className={classes.actions3} />

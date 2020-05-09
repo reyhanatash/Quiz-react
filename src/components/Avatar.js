@@ -37,9 +37,9 @@ Avatar.propTypes = {
 
 Avatar.defaultProps = {
   tag: 'img',
-  rounded: false,
-  circle: true,
-  size: 40,
+  rounded: true,
+  circle: false,
+  size: 50,
   src: userImage,
   style: {},
 };

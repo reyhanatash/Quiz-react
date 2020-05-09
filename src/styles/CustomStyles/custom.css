@@ -363,9 +363,19 @@ input.form-control:focus{
 .table-teacher .MuiTableHead-root > tr > th:nth-child(6) > span{
     margin-right: 45px;
 }
-.table-student .MuiTableHead-root > tr > th:nth-child(8) > span{
+.table-student .MuiTableHead-root > tr > th:nth-child(9) > span{
     margin-right: 45px;
 }
+.table-teachers-books .MuiTableHead-root > tr > th:nth-child(4) > span,
+.table-teachers-books .MuiTableHead-root > tr > th:nth-child(5) > span,
+.table-teachers-books .MuiTableHead-root > tr > th:nth-child(6) > span,
+.table-testBooks .MuiTableHead-root > tr > th:nth-child(4) > span,
+.table-testBooks .MuiTableHead-root > tr > th:nth-child(5) > span,
+.table-testBooks .MuiTableHead-root > tr > th:nth-child(6) > span
+{
+    margin-right:15px;    
+}
+
 .table-icon-delete{
     color : gray !important;
 }
@@ -1291,6 +1301,34 @@ audio:focus , video:focus{
     box-shadow: 0 0 0 1.3px #2684FF;
 }
 
+/* Notifications */
+.notifications-wrapper.popover{
+    max-width: 310px !important;
+}
+.btn-wrapper-notification:hover .table-icon-delete{
+    color : rgb(223, 41, 41)  !important;
+}
+
+.cover-table{
+    max-width: 85px;
+    height: 55px;
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translate( 0 , -50%);
+}
+/* Profile */
+.modal-profile{
+    max-width: 40vw;
+}
+.form-profile input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+.img-profile{
+    max-width: 170px;
+}
 
 /* ------------------------Student ---------------------------- */
 .cr-page__header > .h1.cr-page__title{
@@ -1442,11 +1480,23 @@ max-width: 600px !important;
 .table-admin-test .MuiTableCell-root.py-1.text-left.MuiTableCell-body{
     text-align:  left !important;
 }
+.table-admin-test .MuiTableRow-root.MuiTableRow-head .MuiTableCell-root.MuiTableCell-alignLeft.MuiTableCell-head:nth-child(6){
+    padding-right: 30px;
+}
 .MuiPaper-root.MuiPaper-elevation8.MuiPopover-paper.MuiPaper-rounded{
     width: 350px;
     min-height: 150px;
     box-shadow:0px 0px 5px 0.5px rgba(0, 0, 0, 0.075);
     padding: 10px;
+}
+.percentage-wrapper > .MuiPaper-root.MuiPaper-elevation8.MuiPopover-paper.MuiPaper-rounded{
+    width: 170px;
+    min-height: 150px;
+    box-shadow:0px 0px 5px 0.5px rgba(0, 0, 0, 0.075);
+    padding: 10px;
+}
+.archive-wrapper > .MuiPaper-root.MuiPaper-elevation8.MuiPopover-paper.MuiPaper-rounded{
+    width: 200px;
 }
 .MuiTabs-flexContainer .MuiButtonBase-root.MuiTab-root{
     min-height : 50px;

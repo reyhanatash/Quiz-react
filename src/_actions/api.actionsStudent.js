@@ -53,7 +53,7 @@ function getDashboard() {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           // dispatch(apiLoad(response.data.data));
           dispatch({
             type: allConstantsStudent.LOAD_DASHBOARD,
@@ -86,7 +86,7 @@ function loadTestBookChapterStudent(id) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsStudent.TEST_BOOK_CHAPTER_LOAD_STUDENT,
             data: response.data.data,
@@ -146,7 +146,7 @@ function loadTestMasterStudent(
       )
       .then(response => {
         if (response.status === 200) {
-          if (response.data.message === 'success') {
+          if (response.data.message.toLowerCase() === 'success') {
             dispatch({
               type: allConstantsStudent.LOAD_TEST_MASTER_STUDENT,
               data: response.data.data,
@@ -188,7 +188,7 @@ function testAnswere(MasterId, UserAnswer, Status, Comment, Hashtag, Emoji) {
       )
       .then(response => {
         if (response.status === 200) {
-          if (response.data.message === 'success') {
+          if (response.data.message.toLowerCase() === 'success') {
             dispatch({
               type: allConstantsStudent.TEST_ANSWERES,
               data: response.data.data,
@@ -220,7 +220,7 @@ function quizResult(logId) {
       })
       .then(response => {
         if (response.status === 200) {
-          if (response.data.message === 'success') {
+          if (response.data.message.toLowerCase() === 'success') {
             dispatch({
               type: allConstantsStudent.TESTS_RESULT,
               data: response.data.data,
@@ -251,7 +251,7 @@ function quizResultDetail(logId) {
       })
       .then(response => {
         if (response.status === 200) {
-          if (response.data.message === 'success') {
+          if (response.data.message.toLowerCase() === 'success') {
             dispatch({
               type: allConstantsStudent.QUIZ_DETAIL_RESULT,
               data: response.data.data,
@@ -281,7 +281,7 @@ function loadQuizStudent(bookId) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsStudent.QUIZ_STUDENT,
             data: response.data.data,
@@ -318,7 +318,7 @@ function LoadStartQuiz(QuizMasterId, IsRandome, TestBookId) {
         },
       )
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsStudent.LOAD_START_QUIZ,
             data: response.data.data,
@@ -357,7 +357,7 @@ function navigateQuiz(QuizDetailid, QuizLogId, Action, IsRandom) {
       )
       .then(response => {
         if (response.status === 200) {
-          if (response.data.message === 'success') {
+          if (response.data.message.toLowerCase() === 'success') {
             dispatch({
               type: allConstantsStudent.LOAD_TEST_NAVIGATE_QUIZ,
               data: response.data.data,
@@ -398,7 +398,7 @@ function QuizAnswerForStudent(LogId, QuizMasterId, TestMasterId, Answer, Time) {
       )
       .then(response => {
         if (response.status === 200) {
-          if (response.data.message === 'success') {
+          if (response.data.message.toLowerCase() === 'success') {
             dispatch({
               type: allConstantsStudent.QUIZ_ANSWERE_STUDENT,
               data: response.data.data,
@@ -428,7 +428,7 @@ function loadBookChapter(id) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsStudent.BOOK_CHAPTER_LOAD,
             data: response.data.data,
@@ -459,7 +459,7 @@ function loadSubBook(id) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsStudent.LOAD_SUB_BOOK,
             data: response.data.data,
@@ -490,7 +490,7 @@ function loadTopic(id) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsStudent.LOAD_TOPIC,
             data: response.data.data,
@@ -522,7 +522,7 @@ function loadHashtagStudy(testBookId) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsStudent.LOAD_HASHTAG_STUDY,
             data: response.data.data,
@@ -553,7 +553,7 @@ function loadMediaStudy(TestMasterId) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsStudent.LOAD_MEDIA_STUDY,
             data: response.data.data,
@@ -584,7 +584,7 @@ function LoadTestBookDetails(TestBookId) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsStudent.LOAD_TESTBOOK_DETAILS,
             data: response.data.data,
@@ -616,7 +616,7 @@ function loadQuizDetails(testBookId) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsStudent.LOAD_QUIZ_DETAILS,
             data: response.data.data,
@@ -686,7 +686,7 @@ function demoAnswere(TestBookId, TestMasterId, Action) {
       )
       .then(response => {
         if (response.status === 200) {
-          if (response.data.message === 'success') {
+          if (response.data.message.toLowerCase() === 'success') {
             dispatch({
               type: allConstantsStudent.DEMO_ANSWERE,
               data: response.data.data,
@@ -716,7 +716,7 @@ function loadReportPerQuiz(QuizId) {
         },
       })
       .then(response => {
-        if (response.data.message === 'success') {
+        if (response.data.message.toLowerCase() === 'success') {
           dispatch({
             type: allConstantsStudent.LOAD_REPORT_PER_QUIZ,
             data: response.data.data,

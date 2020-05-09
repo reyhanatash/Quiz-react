@@ -48,6 +48,7 @@ function TeachersPageModal(props) {
   const password = React.createRef();
   const password2 = React.createRef();
   const status = React.createRef();
+  const percentage = React.createRef();
 
   const submit = e => {
     let id = props.isEditing ? props.editData.id : -1;
@@ -57,25 +58,50 @@ function TeachersPageModal(props) {
       name: name.current.value,
       lastName: lastName.current.value,
       userName: userName.current.value,
-      phone: phone.current.value,
       email: email.current.value,
       password: password.current.value,
-      status: status.current.state.value.value,
+      typeco: 2,
+      phone: phone.current.value,
+      percentage: Number(percentage.current.value),
+      // status: status.current.state.value.value,
     };
     // Validation
-    if (!lastName.current.value || !name.current.value) {
+    if (
+      !lastName.current.value ||
+      !name.current.value ||
+      !userName.current.value ||
+      !email.current.value ||
+      !phone.current.value ||
+      !percentage.current.value
+    ) {
+      alertify.error('پر کردن فیلدهای ستاره دار الزامی است');
+      return;
+    }
+    if (props.isEditing === false && !password.current.value) {
       alertify.error('پر کردن فیلدهای ستاره دار الزامی است');
       return;
     }
     if (
-      status.current.state.value === '' ||
-      status.current.state.value === null ||
-      status.current.state.value === undefined ||
-      status.current.state.value.length === 0
+      Number(percentage.current.value) < 0 ||
+      Number(percentage.current.value) > 100
     ) {
-      alertify.error('انتخاب وضعیت');
+      alertify.error('درصد باید بین 0 - 100 باشد');
       return;
     }
+    if (password.current.value !== password2.current.value) {
+      alertify.error('رمزعبور و تکرار رمزعبور یکسان نمیباشد');
+      return;
+    }
+    // console.log(getBookModal);
+    // if (
+    //   status.current.state.value === '' ||
+    //   status.current.state.value === null ||
+    //   status.current.state.value === undefined ||
+    //   status.current.state.value.length === 0
+    // ) {
+    //   alertify.error('انتخاب وضعیت');
+    //   return;
+    // }
 
     props.getBookModal(getBookModal);
     setTimeout(() => {
@@ -114,7 +140,11 @@ function TeachersPageModal(props) {
       className="modal-teacher"
       //  toggle={props.toggle}
     >
-      <ModalHeader>تعریف طراح</ModalHeader>
+      {props.isEditing === false ? (
+        <ModalHeader>تعریف طراح</ModalHeader>
+      ) : (
+        <ModalHeader>ویرایش طراح</ModalHeader>
+      )}
       <ModalBody>
         {/* Forms */}
         <Form innerRef={form}>
@@ -174,6 +204,7 @@ function TeachersPageModal(props) {
               defaultValue={
                 props.isEditing && props.editData ? props.editData.userName : ''
               }
+              readOnly={props.isEditing ? true : false}
               innerRef={userName}
             />
           </FormGroup>
@@ -218,7 +249,9 @@ function TeachersPageModal(props) {
           </FormGroup>
           <FormGroup className="position-relative">
             <div className="custom-select-react-label mb-2" htmlFor="password">
-              <span className="validation-red">* &nbsp;</span>
+              {props.isEditing === false ? (
+                <span className="validation-red">* &nbsp;</span>
+              ) : null}
               رمزعبور
             </div>
             <Input
@@ -246,7 +279,9 @@ function TeachersPageModal(props) {
           </FormGroup>
           <FormGroup className="position-relative">
             <div className="custom-select-react-label mb-2" htmlFor="password">
-              <span className="validation-red">* &nbsp;</span>
+              {props.isEditing === false ? (
+                <span className="validation-red">* &nbsp;</span>
+              ) : null}
               تکرار رمزعبور
             </div>
             <Input
@@ -272,7 +307,7 @@ function TeachersPageModal(props) {
               onClick={showPasswordHandler2}
             />
           </FormGroup>
-          <FormGroup>
+          {/* <FormGroup>
             <div
               className="custom-select-react-label mb-2"
               htmlFor="section-select"
@@ -299,6 +334,33 @@ function TeachersPageModal(props) {
               placeholder="انتخاب کنید..."
               options={statusOptions}
             />
+          </FormGroup> */}
+          {/* Percentage */}
+          <FormGroup className="d-flex flex-column flex-wrap">
+            <div
+              className="custom-select-react-label mb-2"
+              htmlFor="Percentage"
+            >
+              <span className="validation-red">* &nbsp;</span>
+              درصد سهم
+            </div>
+            <div className="d-flex align-items-center">
+              <span>%</span>
+              <Input
+                required
+                type="number"
+                name="Percentage"
+                id="Percentage"
+                placeholder="56"
+                className="text-center col-2"
+                defaultValue={
+                  props.isEditing && props.editData
+                    ? props.editData.Percentage
+                    : '60'
+                }
+                innerRef={percentage}
+              />
+            </div>
           </FormGroup>
           <FormGroup className="mt-4">
             <ButtonGroup className="d-flex">

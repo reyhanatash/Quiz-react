@@ -255,7 +255,17 @@ class App extends React.Component {
                       />
                       <PrivateRoute
                         exact
+                        path="/users/:name"
+                        component={UsersPageAdmin}
+                      />
+                      <PrivateRoute
+                        exact
                         path="/books"
+                        component={BookPageAdmin}
+                      />
+                      <PrivateRoute
+                        exact
+                        path="/books/:name"
                         component={BookPageAdmin}
                       />
                       <PrivateRoute

@@ -18,9 +18,18 @@ class TestPage extends React.Component {
   componentDidMount() {
     window.scrollTo(0, 0);
     if (this.props.location.state) {
-      this.props.dispatch(
-        apiActionsAdmin.loadTestList(this.props.location.state.id),
-      );
+      if (!this.props.selectedFilterChapter) {
+        this.props.dispatch(
+          apiActionsAdmin.loadTestList(this.props.location.state.id),
+        );
+      } else {
+        this.props.dispatch(
+          apiActionsAdmin.loadTestList(
+            this.props.location.state.id,
+            this.props.selectedFilterChapter.id,
+          ),
+        );
+      }
       this.props.dispatch(
         apiActions.loadTestBookChapter(this.props.location.state.id),
       );
@@ -43,6 +52,7 @@ class TestPage extends React.Component {
             Number(id.target.value),
           ),
         );
+        this.props.dispatch(apiActionsAdmin.selectedFilterChapter(id.chapter));
       }, 300);
     } else {
       this.setState({ selectedChapter: null });
@@ -51,6 +61,11 @@ class TestPage extends React.Component {
       );
     }
   };
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.loadTestBookChapter !== prevProps.loadTestBookChapter) {
+      this.props.dispatch(apiActionsAdmin.selectedFilterChapter(null));
+    }
+  }
   // Clear
   componentWillUnmount() {
     const { dispatch } = this.props;
@@ -94,13 +109,19 @@ class TestPage extends React.Component {
                 placeholder="فصل کتاب تست"
                 options={testBookChapterOption}
                 defaultValue={
-                  testBookChapterOption ? testBookChapterOption[0] : ''
+                  testBookChapterOption
+                    ? !this.props.selectedFilterChapter ||
+                      this.props.selectedFilterChapter === ''
+                      ? testBookChapterOption[0]
+                      : this.props.selectedFilterChapter
+                    : ''
                 }
                 // value={this.state.defualtTestBookChapter}
                 onChange={val => {
                   if (val !== null) {
                     this.filterTestBook({
                       target: { value: val.id },
+                      chapter: val,
                     });
                   } else {
                     this.setState({
@@ -146,6 +167,7 @@ function mapStateToProps(state) {
   return {
     loadTestList: state.apiAdmin.loadTestList,
     loadTestBookChapter: state.api.loadTestBookChapter,
+    selectedFilterChapter: state.apiAdmin.selectedChapter,
   };
 }
 export default connect(mapStateToProps)(TestPage);

@@ -44,7 +44,9 @@ function login(UserName, Password, history) {
       )
       .then(user => {
         if (user.status === 200) {
-          if (user.data.message === 'Invalid  username or password') {
+          if (
+            user.data.message.toLowerCase() === 'invalid  username or password'
+          ) {
             dispatch(failure('error'));
             alertify.error('نام کاربری یا رمز عبور صحیح نمی باشد ');
             return;
@@ -55,7 +57,7 @@ function login(UserName, Password, history) {
               // cookies.set('user', user.data.data, { maxAge: 5000 });
               cookies.set('user', user.data.data);
               cookies.set('userInfo', user.data);
-              dispatch(success(user));
+              dispatch(success(user.data));
               if (
                 sessionStorage.getItem('demo') &&
                 JSON.parse(sessionStorage.getItem('demo')).status === true
@@ -120,10 +122,10 @@ function signup(Name, LastName, UserName, Email, PhoneNo, TypeCo, Password) {
         if (response.status === 200) {
           if (response.data) {
             dispatch(success(response));
-            if (response.data.message === 'success') {
+            if (response.data.message.toLowerCase() === 'success') {
               alertify.success('ثبت نام با موفقیت انجام شد.');
             }
-            if (response.data.message === 'error') {
+            if (response.data.message.toLowerCase() === 'error') {
               alertify.error('ثبت نام با خطا روبرو شد.');
             }
           }

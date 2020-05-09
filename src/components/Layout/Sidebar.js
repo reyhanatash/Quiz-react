@@ -27,6 +27,12 @@ import {
 import bn from 'utils/bemnames';
 import QuizIcon from '@material-ui/icons/Ballot';
 import Cookies from 'universal-cookie';
+import PeopleIcon from '@material-ui/icons/People';
+import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+import LibraryAddIcon from '@material-ui/icons/LibraryAdd';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+
 const cookies = new Cookies();
 
 const sidebarBackground = {
@@ -122,6 +128,36 @@ class Sidebar extends React.Component {
       this.setState({
         navItems: [
           { to: '/dashboard', name: 'داشبورد', exact: true, Icon: MdDashboard },
+          {
+            to: '/books/allBooks',
+            name: 'کتاب ها',
+            exact: true,
+            Icon: LibraryBooksIcon,
+          },
+          {
+            to: '/users/2',
+            name: 'طراحان',
+            exact: true,
+            Icon: SupervisedUserCircleIcon,
+          },
+          {
+            to: '/users/3',
+            name: 'کاربران',
+            exact: true,
+            Icon: PeopleIcon,
+          },
+          {
+            to: '/books/booksReadyToPublish',
+            name: 'کتاب های آماده انتشار',
+            exact: true,
+            Icon: LibraryAddIcon,
+          },
+          {
+            to: '/soldBooks',
+            name: 'کتاب های  فروخته شده',
+            exact: true,
+            Icon: MonetizationOnIcon,
+          },
         ],
       });
     }
@@ -148,8 +184,8 @@ class Sidebar extends React.Component {
             <div className="navbar-brand d-flex flex-column align-items-center justify-content-center m-auto">
               <img
                 src={logo200Image}
-                width="70"
-                height="50"
+                width="90"
+                height="65"
                 className="pr-2"
                 alt=""
               />
@@ -173,53 +209,55 @@ class Sidebar extends React.Component {
               </NavItem>
             ))}
             {/* Login */}
-            {cookies.get('userInfo') && cookies.get('userInfo').role === '2' ? (
-              <NavItem
-                className={bem.e('nav-item')}
-                onClick={this.handleClick('Pages')}
-              >
-                <BSNavLink className={bem.e('nav-item-collapse')}>
-                  <div className="d-flex">
-                    <MdPages className={bem.e('nav-item-icon')} />
-                    <span className="">آزمون</span>
-                  </div>
-                  <MdKeyboardArrowDown
-                    className={bem.e('nav-item-icon')}
-                    style={{
-                      padding: 0,
-                      transform: this.state.isOpenPages
-                        ? 'rotate(0deg)'
-                        : 'rotate(90deg)',
-                      transitionDuration: '0.3s',
-                      transitionProperty: 'transform',
-                    }}
-                  />
-                </BSNavLink>
-              </NavItem>
-            ) : (
-              <NavItem
-                className={bem.e('nav-item')}
-                onClick={this.handleClick('Pages')}
-              >
-                <BSNavLink className={bem.e('nav-item-collapse')}>
-                  <div className="d-flex">
-                    <MdPages className={bem.e('nav-item-icon')} />
-                    <span className="">صفحه ها</span>
-                  </div>
-                  <MdKeyboardArrowDown
-                    className={bem.e('nav-item-icon')}
-                    style={{
-                      padding: 0,
-                      transform: this.state.isOpenPages
-                        ? 'rotate(0deg)'
-                        : 'rotate(90deg)',
-                      transitionDuration: '0.3s',
-                      transitionProperty: 'transform',
-                    }}
-                  />
-                </BSNavLink>
-              </NavItem>
-            )}
+            {
+              cookies.get('userInfo') &&
+              cookies.get('userInfo').role === '2' ? (
+                <NavItem
+                  className={bem.e('nav-item')}
+                  onClick={this.handleClick('Pages')}
+                >
+                  <BSNavLink className={bem.e('nav-item-collapse')}>
+                    <div className="d-flex">
+                      <MdPages className={bem.e('nav-item-icon')} />
+                      <span className="">آزمون</span>
+                    </div>
+                    <MdKeyboardArrowDown
+                      className={bem.e('nav-item-icon')}
+                      style={{
+                        padding: 0,
+                        transform: this.state.isOpenPages
+                          ? 'rotate(0deg)'
+                          : 'rotate(90deg)',
+                        transitionDuration: '0.3s',
+                        transitionProperty: 'transform',
+                      }}
+                    />
+                  </BSNavLink>
+                </NavItem>
+              ) : null
+              // <NavItem
+              //   className={bem.e('nav-item')}
+              //   onClick={this.handleClick('Pages')}
+              // >
+              //   <BSNavLink className={bem.e('nav-item-collapse')}>
+              //     <div className="d-flex">
+              //       <MdPages className={bem.e('nav-item-icon')} />
+              //       <span className="">صفحه ها</span>
+              //     </div>
+              //     <MdKeyboardArrowDown
+              //       className={bem.e('nav-item-icon')}
+              //       style={{
+              //         padding: 0,
+              //         transform: this.state.isOpenPages
+              //           ? 'rotate(0deg)'
+              //           : 'rotate(90deg)',
+              //         transitionDuration: '0.3s',
+              //         transitionProperty: 'transform',
+              //       }}
+              //     />
+              //   </BSNavLink>
+              // </NavItem>
+            }
             {/* Azmon */}
             <Collapse isOpen={this.state.isOpenPages}>
               {this.state.azmon.map(({ to, name, exact, Icon }, index) => (
