@@ -31,6 +31,7 @@ const initialState = [
     loadNotifications: '',
     notificationsCount: '',
     loadProfile: '',
+    checkBankNumber: '',
   },
 ];
 
@@ -192,6 +193,11 @@ export function api(state = initialState, action) {
       return {
         ...state,
         loadProfile: action.data,
+      };
+    case allConstants.CHECK_BANK_NUMBER:
+      return {
+        ...state,
+        checkBankNumber: action.data,
       };
     default:
       return state;

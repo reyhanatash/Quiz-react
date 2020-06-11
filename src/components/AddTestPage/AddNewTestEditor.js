@@ -13,7 +13,7 @@ export default function AddNewTestEditor(props) {
   const handler = myEditor => {
     myEditor.addEventListener(
       'keyup',
-      function() {
+      function () {
         const html = myEditor.children[2].children[0].innerHTML;
         props.updateEditorText(html);
       },
@@ -111,7 +111,7 @@ export default function AddNewTestEditor(props) {
         }}
         onFocus={(event, editor) => {
           const myEditor = editor.sourceElement.parentElement.children[2];
-          myEditor.addEventListener('keyup', function() {
+          myEditor.addEventListener('keyup', function () {
             handler(myEditor);
           });
           // console.log('Focus.', editor);

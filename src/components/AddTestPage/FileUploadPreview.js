@@ -22,9 +22,13 @@ export default function ResponsiveDialog(props) {
       >
         <DialogTitle id="responsive-dialog-title">{props.name}</DialogTitle>
         <DialogContent>
-          <DialogContentText className="d-flex flex-column p-2">
+          <DialogContentText className="d-flex flex-column align-items-start p-2">
             {props.fileType && props.fileType.includes('image') ? (
-              <img src={props.base64data} alt={props.name} />
+              <img
+                src={props.base64data}
+                alt={props.name}
+                className="align-self-center"
+              />
             ) : props.fileType && props.fileType.includes('audio') ? (
               <audio
                 src={props.base64data}

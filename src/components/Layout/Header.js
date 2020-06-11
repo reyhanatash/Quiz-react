@@ -28,6 +28,7 @@ import {
 } from 'reactstrap';
 import bn from 'utils/bemnames';
 import { userActions, apiActions } from '../../_actions';
+import { allConstants } from '../../_constants';
 import Cookies from 'universal-cookie';
 import ProfileModal from '../ProfileModal';
 
@@ -159,7 +160,6 @@ class Header extends React.Component {
       BankAccountNumber,
     );
   };
-
   componentWillUnmount() {
     document.removeEventListener('mousedown', this.handleClickOutside);
   }
@@ -222,12 +222,17 @@ class Header extends React.Component {
                 className="notifications-wrapper"
               >
                 <PopoverBody style={{ maxHeight: '320px', overflowY: 'auto' }}>
-                  <Notifications
-                    key={this.state.notificationsData}
-                    notificationsData={this.state.notificationsData}
-                    countNew={this.props.notificationsCount}
-                    deleteNotification={this.removeNotification}
-                  />
+                  {this.state.notificationsData &&
+                  this.state.notificationsData.length !== 0 ? (
+                    <Notifications
+                      key={this.state.notificationsData}
+                      notificationsData={this.state.notificationsData}
+                      countNew={this.props.notificationsCount}
+                      deleteNotification={this.removeNotification}
+                    />
+                  ) : (
+                    <span>اعلانی وجود ندارد</span>
+                  )}
                 </PopoverBody>
               </Popover>
             </NavItem>
@@ -262,7 +267,8 @@ class Header extends React.Component {
                       cookies.get('userInfo').role === '2' ? (
                         <p className="d-flex flex-column flex-wrap justify-content-center">
                           <span className="text-center">
-                            {this.props.profileData[0].fldName}
+                            {this.props.profileData[0].fldName}{' '}
+                            {this.props.profileData[0].fldLastName}
                           </span>
                           <span className="text-center py-1">
                             سهم از فروش :{' '}
@@ -316,6 +322,8 @@ class Header extends React.Component {
           getProfileModal={this.getProfileModal}
           loadProfile={this.props.profileData}
           getProfile={this.props.loadProfile}
+          checkBankNumber={this.props.checkBankNumber}
+          clearBankCheck={this.props.clearBankCheck}
         />
       </Navbar>
     );
@@ -329,6 +337,8 @@ const mapDispatchtoProps = dispatch => {
     SeenNotifications: () => dispatch(apiActions.SeenNotifications()),
     NotificationCount: () => dispatch(apiActions.NotificationCount()),
     deleteNotification: id => dispatch(apiActions.deleteNotification(id)),
+    checkBankNumber: bankNumber =>
+      dispatch(apiActions.checkBankNumber(bankNumber)),
     loadProfile: () => dispatch(apiActions.loadProfile()),
     updateProfile: (
       Name,
@@ -348,6 +358,11 @@ const mapDispatchtoProps = dispatch => {
           BankAccountNumber,
         ),
       ),
+    clearBankCheck: () =>
+      dispatch({
+        type: allConstants.CHECK_BANK_NUMBER,
+        data: null,
+      }),
   };
 };
 function mapStateToProps(state) {

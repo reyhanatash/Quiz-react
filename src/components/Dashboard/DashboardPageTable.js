@@ -70,12 +70,13 @@ export default function EnhancedTable(props) {
         description: data.testBookDiscription,
         countPurchased: data.countPurchased,
         price: data.fldPrice,
-        // percentage: data.fldPercentage,
+        percentage: data.fldPercentage,
         isApprove: data.fldIsApprove,
         archiveDate: data.fldArchiveDate,
         rejectType: data.fldNameRejectType,
         rejectComment: data.fLdComment,
         cover: data.fldCoverAddress,
+        isFinish: data.isFinish,
       });
     });
   }
@@ -108,8 +109,8 @@ export default function EnhancedTable(props) {
   // Head Rows
   const headCells = [
     { id: 'id-books', numeric: true, label: 'عملیات' },
-    // { id: 'percentage', numeric: true, label: 'درصد سهم' },
     { id: 'isApprove', numeric: true, label: 'وضعیت' },
+    { id: 'percentage', numeric: true, label: 'سهم از فروش' },
     { id: 'countPurchased', numeric: true, label: 'تعداد فروش' },
     { id: 'price', numeric: true, label: 'قیمت' },
     { id: 'numTest', numeric: true, label: 'تعداد تست ها' },
@@ -435,41 +436,52 @@ export default function EnhancedTable(props) {
                             </IconButton>
                           </Tooltip>
                         </TableCell>
-                        {/* <TableCell
-                          component="th"
-                          id={labelId}
-                          scope="row"
-                          padding="none"
-                          className="direction-right"
-                        >
-                          {row.percentage} %
-                        </TableCell> */}
+
                         <TableCell align="right">
                           <Tooltip
                             className=""
                             title={
                               (row.isApprove === 1 &&
-                                row.archiveDate === null) ||
+                                row.archiveDate === null &&
+                                row.isFinish === 1) ||
                               (row.isApprove === 1 &&
-                                row.archiveDate === '') ? (
+                                row.archiveDate === '' &&
+                                row.isFinish === 1) ? (
                                 <p className="tooltip-table">
                                   کتاب تایید شده است و فعال میباشد
                                 </p>
                               ) : (row.isApprove === 0 &&
-                                  row.archiveDate === null) ||
+                                  row.archiveDate === null &&
+                                  row.isFinish === 2) ||
                                 (row.isApprove === 0 &&
-                                  row.archiveDate === '') ? (
+                                  row.archiveDate === '' &&
+                                  row.isFinish === 2) ? (
                                 <p className="tooltip-table">
                                   کتاب بدلیل {row.rejectType} نامناسب تایید نشده
+                                  <br></br>
                                   توضیحات عدم تایید : {row.rejectComment}
                                 </p>
                               ) : (row.isApprove === 1 &&
-                                  row.archiveDate !== null) ||
+                                  row.archiveDate !== null &&
+                                  row.isFinish === 1) ||
                                 (row.isApprove === 1 &&
-                                  row.archiveDate !== '') ? (
+                                  row.archiveDate !== '' &&
+                                  row.isFinish === 1) ? (
                                 <p className="tooltip-table">
                                   کتاب غیر فعال میباشد و در تاریخ{' '}
                                   {row.archiveDate} بایگانی شده است
+                                </p>
+                              ) : (row.isApprove === 0 &&
+                                  row.archiveDate === null &&
+                                  row.isFinish === 1) ||
+                                (row.isApprove === 0 &&
+                                  row.archiveDate === '' &&
+                                  row.isFinish === 1) ||
+                                (row.isApprove === null &&
+                                  row.archiveDate === '' &&
+                                  row.isFinish === 1) ? (
+                                <p className="tooltip-table">
+                                  کتاب در انتظار بررسی توسط ادمین است
                                 </p>
                               ) : (
                                 <p className="tooltip-table">
@@ -479,31 +491,66 @@ export default function EnhancedTable(props) {
                             }
                           >
                             {(row.isApprove === 1 &&
-                              row.archiveDate === null) ||
-                            (row.isApprove === 1 && row.archiveDate === '') ? (
+                              row.archiveDate === null &&
+                              row.isFinish === 1) ||
+                            (row.isApprove === 1 &&
+                              row.archiveDate === '' &&
+                              row.isFinish === 1) ? (
                               <span className="cursor-pointer text-success">
                                 تایید شده
                               </span>
                             ) : (row.isApprove === 0 &&
-                                row.archiveDate === null) ||
+                                row.archiveDate === null &&
+                                row.isFinish === 2) ||
                               (row.isApprove === 0 &&
-                                row.archiveDate === '') ? (
+                                row.archiveDate === '' &&
+                                row.isFinish === 2) ? (
                               <span className="cursor-pointer text-secondary">
                                 تایید نشده
                               </span>
                             ) : (row.isApprove === 1 &&
-                                row.archiveDate !== null) ||
+                                row.archiveDate !== null &&
+                                row.isFinish === 1) ||
                               (row.isApprove === 1 &&
-                                row.archiveDate !== '') ? (
-                              <span className="cursor-pointer text-warning">
+                                row.archiveDate !== '' &&
+                                row.isFinish === 1) ? (
+                              <span
+                                className="cursor-pointer "
+                                style={{ color: '#debb13' }}
+                              >
                                 بایگانی شده
                               </span>
+                            ) : (row.isApprove === 0 &&
+                                row.archiveDate === null &&
+                                row.isFinish === 1) ||
+                              (row.isApprove === 0 &&
+                                row.archiveDate === '' &&
+                                row.isFinish === 1) ||
+                              (row.isApprove === null &&
+                                row.archiveDate === '' &&
+                                row.isFinish === 1) ? (
+                              <span
+                                className="cursor-pointer"
+                                style={{ color: '#3466e6' }}
+                              >
+                                در انتظار بررسی
+                              </span>
                             ) : (
-                              <span className="cursor-pointer">مشخص نشده</span>
+                              <span className="cursor-pointer">بررسی نشده</span>
                             )}
                           </Tooltip>
                         </TableCell>
-
+                        <TableCell
+                          component="th"
+                          id={labelId}
+                          scope="row"
+                          padding="none"
+                          className="direction-right"
+                        >
+                          {row.percentage && row.percentage !== 'تعيين نشده'
+                            ? row.percentage + '%'
+                            : row.percentage}
+                        </TableCell>
                         <TableCell
                           component="th"
                           id={labelId}

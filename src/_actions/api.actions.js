@@ -49,6 +49,7 @@ export const apiActions = {
   deleteNotification,
   loadProfile,
   updateProfile,
+  checkBankNumber,
 };
 
 let url;
@@ -1119,10 +1120,20 @@ function deleteFile(Id) {
         },
       )
       .then(response => {
-        dispatch({
-          type: allConstants.DELETE_FILE,
-          data: response.data,
-        });
+        if (
+          response.data.message.toLowerCase() === 'success' &&
+          response.data.data[0].message !== 'Error'
+        ) {
+          alertify.success(response.data.data[0].showMessageToUser);
+          dispatch({
+            type: allConstants.DELETE_FILE,
+            data: response.data,
+          });
+        } else if (response.data.data[0].message === 'Error') {
+          alertify.error(response.data.data[0].showMessageToUser);
+        } else {
+          alertify.error(response.data.message);
+        }
       })
       .catch(error => dispatch(failure(error)));
 
@@ -1357,8 +1368,8 @@ function loadTopicSetting(testBookId) {
     }
   };
 }
-// Test Book Setting
 
+// Test Book Setting
 function TestBookSetting(
   TestBookId,
   TopicId,
@@ -1605,6 +1616,38 @@ function updateProfile(
     }
   };
 }
+// Validate Bank Number
+function checkBankNumber(bankNumber) {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .get(url + `api/User/IBANCheaker/${bankNumber}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + cookies.get('user'),
+        },
+      })
+      .then(response => {
+        if (response.data.message.toLowerCase() === 'success') {
+          dispatch({
+            type: allConstants.CHECK_BANK_NUMBER,
+            data: response.data.data,
+          });
+        } else {
+          alertify.error(response.data.message);
+        }
+      })
+      .catch(error => dispatch(failure(error)));
+
+    function request(user) {
+      return { type: allConstants.LOAD_DASHBOARD_REQUEST, user };
+    }
+    function failure(error) {
+      return { type: allConstants.LOAD_DASHBOARD_FAILURE, error };
+    }
+  };
+}
+
 function apiLoad(data) {
   return {
     type: allConstants.API_LOAD,

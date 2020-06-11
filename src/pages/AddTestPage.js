@@ -137,7 +137,7 @@ class AddTestPage extends React.Component {
           this.state.filterdStatus,
         ),
       );
-    }, 600);
+    }, 200);
     setTimeout(() => {
       if (this.state.keepEditing === true) {
         this.selectedTest(id);
@@ -212,7 +212,7 @@ class AddTestPage extends React.Component {
     });
     const media = [];
     mediaArray.forEach(test => {
-      if (test.fldMediaAddress !== '' || test.fldMediaAddress !== null) {
+      if (test.fldMediaAddress !== '' && test.fldMediaAddress !== null) {
         media.push({
           id: test.fldPkAnswerMedia ? test.fldPkAnswerMedia : -1,
           fldPkAnswerMedia: test.fldPkAnswerMedia
@@ -225,7 +225,7 @@ class AddTestPage extends React.Component {
         });
       }
     });
-    data = { ...data, media: media };
+    data = { ...data, media: media.length !== 0 ? media : null };
     const disableData = this.props.loadTest[index - 2];
     if (data !== undefined) {
       this.props.dispatch(apiActions.selectedTest(data));
@@ -249,7 +249,7 @@ class AddTestPage extends React.Component {
     });
     const media = [];
     mediaArray.forEach(test => {
-      if (test.fldMediaAddress !== '' || test.fldMediaAddress !== null) {
+      if (test.fldMediaAddress !== '' && test.fldMediaAddress !== null) {
         media.push({
           id: test.fldPkAnswerMedia ? test.fldPkAnswerMedia : -1,
           fldPkAnswerMedia: test.fldPkAnswerMedia
@@ -262,7 +262,7 @@ class AddTestPage extends React.Component {
         });
       }
     });
-    data = { ...data, media: media };
+    data = { ...data, media: media.length !== 0 ? media : null };
     const disableData = this.props.loadTest[index + 2];
     if (data !== undefined) {
       this.props.dispatch(apiActions.selectedTest(data));
@@ -469,6 +469,10 @@ class AddTestPage extends React.Component {
           Number(this.props.selectedTest.fldPkTestBookChapter),
         ),
       );
+      this.props.dispatch({
+        type: allConstants.UPLOAD_FILE,
+        data: null,
+      });
     }
     if (
       prevProps.loadBookChapter !== this.props.loadBookChapter &&
@@ -506,6 +510,16 @@ class AddTestPage extends React.Component {
       this.setState({
         lastSubBookId: this.props.selectedTest.fldPkSubBookChapter,
       });
+    }
+    if (prevProps.uploadFile !== this.props.uploadFile) {
+      this.props.dispatch(
+        apiActions.loadTest(
+          this.props.location.state.id,
+          this.state.filteredTest,
+          this.state.filteredBook,
+          this.state.filterdStatus,
+        ),
+      );
     }
   }
   // Keep Editing
@@ -715,6 +729,7 @@ function mapStateToProps(state) {
     loadHashtagTrend: state.api.loadHashtagTrend,
     loadSubBookOptions: state.api.loadSubBook,
     loadTopicOptions: state.api.loadTopic,
+    uploadFile: state.api.uploadFile,
   };
 }
 export default connect(mapStateToProps)(AddTestPage);

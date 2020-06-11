@@ -37,7 +37,7 @@ export default function EnhancedTable(props) {
         price: data.fldPrice,
         discount: data.fldDiscountCode,
         purchaseDate: data.fldPurchaseDate,
-        discountPrice: data.fldDiscountPrice,
+        discountPrice: data.fldDiscountAmount,
       });
     });
   }

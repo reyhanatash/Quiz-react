@@ -17,6 +17,7 @@ import { apiActions } from '../_actions';
 import alertify from 'alertifyjs';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import CheckIcon from '@material-ui/icons/CheckCircle';
+import CancelIcon from '@material-ui/icons/Cancel';
 import userImage from 'assets/img/users/avatar.png';
 
 function ProfileModal(props) {
@@ -68,30 +69,35 @@ function ProfileModal(props) {
     }, 50);
   };
   //   Check Bank Account
-  const checkBankNumber = () => {
-    const getProfileModal = {
-      Name: firstName.current.value,
-      LastName: lastName.current.value,
-      Email: email.current.value,
-      Password: password.current.value,
-      PhoneNumber: phoneNumber.current.value,
-      BankAccountNumber: bankNumber.current.value,
-    };
-    props.getProfileModal(getProfileModal);
-    setTimeout(() => {
-      props.getProfile();
-    }, 50);
-  };
+  //   const checkBankNumber = () => {
+  //     const getProfileModal = {
+  //       Name: firstName.current.value,
+  //       LastName: lastName.current.value,
+  //       Email: email.current.value,
+  //       Password: password.current.value,
+  //       PhoneNumber: phoneNumber.current.value,
+  //       BankAccountNumber: bankNumber.current.value,
+  //     };
+  //     props.getProfileModal(getProfileModal);
+  //     setTimeout(() => {
+  //       props.getProfile();
+  //     }, 50);
+  //   };
   useEffect(() => {
     if (bankNumber2 && bankNumber2.length === 26) {
-      checkBankNumber();
+      props.checkBankNumber(bankNumber.current.value);
     }
   }, [bankNumber2]);
+  useEffect(() => {
+    if (!props.isOpen) {
+      props.clearBankCheck();
+    }
+  }, [props.isOpen]);
   return (
     <Modal
       isOpen={props.isOpen}
       className="modal-profile"
-      //  toggle={props.toggle}
+      toggle={props.toggle}
     >
       <ModalHeader>پروفایل من</ModalHeader>
       <ModalBody>
@@ -186,8 +192,19 @@ function ProfileModal(props) {
             <FormGroup className="d-flex flex-column">
               <Label htmlFor="bankNumber">شماره شبا</Label>
               <div className="d-flex align-items-center">
-                {props.loadProfile && props.loadProfile[0].fldFnResult === 1 ? (
+                {!props.resultBankNumber &&
+                props.loadProfile &&
+                props.loadProfile[0].fldFnResult === 1 ? (
                   <CheckIcon className="text-success" />
+                ) : props.resultBankNumber &&
+                  props.resultBankNumber[0].message === 'Succeed' ? (
+                  <CheckIcon className="text-success" />
+                ) : (!props.resultBankNumber &&
+                    props.loadProfile &&
+                    props.loadProfile[0].fldFnResult === 0) ||
+                  (props.resultBankNumber &&
+                    props.resultBankNumber[0].message === 'Faild') ? (
+                  <CancelIcon className="text-danger" />
                 ) : null}
                 <Input
                   type="text"
@@ -206,7 +223,9 @@ function ProfileModal(props) {
                 />
               </div>
             </FormGroup>
-            {props.loadProfile && props.loadProfile[0].fldFnResult === 1 ? (
+            {!props.resultBankNumber &&
+            props.loadProfile &&
+            props.loadProfile[0].fldFnResult === 1 ? (
               <p
                 className="text-right d-flex flex-column bg-light p-2 rounded"
                 style={{ fontSize: '0.9rem' }}
@@ -217,6 +236,25 @@ function ProfileModal(props) {
                 <br></br>
                 <span>
                   شماره حساب : {props.loadProfile[0].fldFnAccountNumber}
+                </span>
+              </p>
+            ) : props.resultBankNumber &&
+              props.resultBankNumber[0].message === 'Faild' ? (
+              <span className="my-3 mr-4 d-inline-flex text-muted">
+                {props.resultBankNumber[0].showMessageToUser}
+              </span>
+            ) : props.resultBankNumber &&
+              props.resultBankNumber[0].message === 'Succeed' ? (
+              <p
+                className="text-right d-flex flex-column bg-light p-2 rounded"
+                style={{ fontSize: '0.9rem' }}
+              >
+                <span>کشور : {props.resultBankNumber[0].country}</span>
+                <br></br>
+                <span>بانک : {props.resultBankNumber[0].bankName}</span>
+                <br></br>
+                <span>
+                  شماره حساب : {props.resultBankNumber[0].accountNumber}
                 </span>
               </p>
             ) : null}
@@ -315,6 +353,7 @@ function mapStateToProps(state) {
   return {
     editData: state.api.selectedItem,
     getDashboard: state.api.dashboard,
+    resultBankNumber: state.api.checkBankNumber,
   };
 }
 

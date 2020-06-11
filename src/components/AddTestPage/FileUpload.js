@@ -87,6 +87,7 @@ function FileUpload(props) {
   const [base64data, updatebase64data] = React.useState('');
   const [fileType, updatefileType] = React.useState('');
   const showFile = file => {
+    console.log(file);
     updatefileType(file.type);
     props.dispatch(apiActions.loadFile(file.fldMediaAddress));
     // if (!props.loadFile && props.loadFile === undefined) {
@@ -123,7 +124,6 @@ function FileUpload(props) {
   const handleClose = () => {
     setOpen(false);
   };
-
   return (
     <>
       <Row className="col-12 my-2 py-2 px-1 mx-0">

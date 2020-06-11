@@ -35,7 +35,7 @@ export default function EnhancedTable(props) {
         // isActive: data.fldActive,
         dateRegister: data.registerDate,
         totalPurchase: data.totalPurchasePrice,
-        totalDiscount: data.totalDiscountPrice,
+        totalDiscount: data.totalDiscountAmount,
       });
     });
   }

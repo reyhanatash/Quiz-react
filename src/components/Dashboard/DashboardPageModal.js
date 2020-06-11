@@ -14,6 +14,8 @@ import { connect } from 'react-redux';
 import Select from 'react-select';
 import { apiActions } from '../../_actions';
 import alertify from 'alertifyjs';
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
 
 function DashboardPageModal(props) {
   let loadBooksOption = [];
@@ -186,7 +188,16 @@ function DashboardPageModal(props) {
               id="author"
               placeholder="اسم مولف"
               className="text-right"
-              defaultValue={props.isEditing ? props.editData.authorName : ''}
+              disabled={cookies.get('userInfo') ? true : false}
+              defaultValue={
+                cookies.get('userInfo')
+                  ? cookies.get('userInfo').firstName +
+                    ' ' +
+                    cookies.get('userInfo').lastName
+                  : props.isEditing
+                  ? props.editData.authorName
+                  : ''
+              }
               innerRef={authName}
             />
           </FormGroup>

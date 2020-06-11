@@ -119,22 +119,38 @@ class BookPage extends React.Component {
       this.publishToWordpress(row);
     }
   };
-  updatePrice = (testBookId, price) => {
+  updatePrice = (testBookId, price, archiveDate) => {
     this.props.dispatch(apiActionsAdmin.updatePrice(testBookId, Number(price)));
+    // WP
+    const status = archiveDate !== '' ? 0 : archiveDate === '' ? 1 : null;
+    this.props.dispatch(
+      apiActionsAdmin.updateTestBookWordpress(
+        String(testBookId),
+        String(status),
+        price,
+      ),
+    );
     this.refreshList();
   };
-  updatePercentage = (testBookId, percent) => {
+  updatePercentage = (testBookId, percent, archiveDate) => {
     this.props.dispatch(
       apiActionsAdmin.updatePercentage(testBookId, Number(percent)),
     );
     this.refreshList();
   };
-  updateArchive = (testBookId, archive) => {
-    console.log(archive);
+  updateArchive = (testBookId, archive, price) => {
     const isArchive = archive === 'checkedComplete' ? 1 : 0;
-    console.log(isArchive);
     this.props.dispatch(
       apiActionsAdmin.setArchiveTestBook(testBookId, isArchive),
+    );
+    // WP
+    const status = isArchive === 1 ? 0 : isArchive === 0 ? 1 : null;
+    this.props.dispatch(
+      apiActionsAdmin.updateTestBookWordpress(
+        String(testBookId),
+        String(status),
+        price,
+      ),
     );
     this.refreshList();
   };
@@ -185,7 +201,7 @@ class BookPage extends React.Component {
         apiActionsAdmin.publishToWordpress(
           data.id,
           data.name,
-          '',
+          data.catagory,
           data.desc,
           data.desc.slice(0, 30),
           data.price,

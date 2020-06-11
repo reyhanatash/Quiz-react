@@ -22,6 +22,7 @@ export const apiActionsAdmin = {
   updatePrice,
   updatePercentage,
   publishToWordpress,
+  updateTestBookWordpress,
 };
 let url;
 // if (
@@ -571,6 +572,38 @@ function publishToWordpress(
           ShortDescription,
           Price,
           Image,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + cookies.get('user'),
+          },
+        },
+      )
+      .then(response => {
+        if (response.status === 200) {
+          console.log(response);
+        }
+      })
+      .catch(error => console.log(error));
+
+    function request(response) {
+      return { type: allConstantsAdmin.LOAD_DASHBOARD_REQUEST, response };
+    }
+  };
+}
+
+// Update Testbook to WordPress
+function updateTestBookWordpress(Id, Status, Price) {
+  return dispatch => {
+    dispatch(request());
+    axios
+      .post(
+        url + 'api/Book/UpdateWPBook',
+        {
+          Id,
+          Status,
+          Price,
         },
         {
           headers: {

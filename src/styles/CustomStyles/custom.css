@@ -344,7 +344,7 @@ input.form-control:focus{
     width: inherit;
 }
 .popover-body.header .bg-gradient-theme.border-light.bg-light{
- background: rgb(182, 215, 226) !important;
+ background: #daedf5 !important;
 }
 .popover-body.header .card-title{
     color : black !important;
@@ -1303,7 +1303,7 @@ audio:focus , video:focus{
 
 /* Notifications */
 .notifications-wrapper.popover{
-    max-width: 310px !important;
+    max-width: 370px !important;
 }
 .btn-wrapper-notification:hover .table-icon-delete{
     color : rgb(223, 41, 41)  !important;
@@ -1316,7 +1316,13 @@ audio:focus , video:focus{
     top: 50%;
     right: 15px;
     transform: translate( 0 , -50%);
+    /* border : 1px solid transparent;
+    border-radius: 3px;
+    transition: 0.4s; */
 }
+/* .cover-table:hover{
+    border-color: black;
+} */
 /* Profile */
 .modal-profile{
     max-width: 40vw;

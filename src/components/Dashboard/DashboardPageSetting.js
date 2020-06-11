@@ -43,13 +43,15 @@ function DashboardPageModal(props) {
   const quizTimeRef = React.createRef();
 
   const submit = e => {
+    const isFinishConvert =
+      IsFinishValue === false ? 0 : IsFinishValue === true ? 1 : IsFinishValue;
     const TestBookId =
       props.testBookSetting && props.testBookSetting.fldPkTestBook
         ? props.testBookSetting.fldPkTestBook
         : -1;
     const TopicId = FkTopic.current.state.value.id;
     const Duration = quizTime;
-    const IsFinish = IsFinishValue;
+    const IsFinish = isFinishConvert;
     const Coverbase64 = coverFile !== '' ? coverFile.base64 : '';
     const format = coverFile !== '' ? coverFile.type.split('/')[1] : '';
     // Send Data
@@ -67,14 +69,6 @@ function DashboardPageModal(props) {
       props.dispatch(apiActions.getDashboard());
       props.toggle();
     }, 10);
-
-    // Get Multi Select Value
-    // let FkMajorVals = [];
-    // if (FkMajor.current.state.value.length !== 0) {
-    //   FkMajor.current.state.value.forEach(item => {
-    //     FkMajorVals.push(item.id);
-    //   });
-    // }
   };
 
   const [quizTime, setQuizTime] = React.useState('');
@@ -125,10 +119,7 @@ function DashboardPageModal(props) {
     }
   });
   return (
-    <Modal
-      isOpen={props.isOpen}
-      //  toggle={props.toggle}
-    >
+    <Modal isOpen={props.isOpen} toggle={props.toggle}>
       <ModalHeader>تنظیمات کتاب</ModalHeader>
       <ModalBody>
         {/* Forms */}
@@ -201,8 +192,11 @@ function DashboardPageModal(props) {
                 style={{ marginRight: '10px' }}
                 title={
                   <p className="tooltip-table">
-                    حجم عکس باید از 1 مگابایت کمتر باشد و پیشنهاد میشود سایز عکس
-                    1200 در 1200 باشد
+                    <span>1) حجم عکس باید از 1 مگابایت کمتر باشد</span>
+                    <br></br>
+                    <span>
+                      2) پیشنهاد میشود سایز عکس 1200 در 1200 پیکسل باشد
+                    </span>
                   </p>
                 }
               >
@@ -248,7 +242,16 @@ function DashboardPageModal(props) {
           </FormGroup>
           <FormGroup className="mt-4">
             <ButtonGroup className="d-flex">
-              <Button color="primary" className="ml-2 rounded" onClick={submit}>
+              <Button
+                color="primary"
+                className="ml-2 rounded"
+                onClick={submit}
+                disabled={
+                  props.testBookSetting && props.testBookSetting.isFinish === 1
+                    ? true
+                    : false
+                }
+              >
                 {props.isEditing ? 'ذخیره' : 'ذخیره'}
               </Button>{' '}
               <Button

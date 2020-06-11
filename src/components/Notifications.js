@@ -21,6 +21,7 @@ const Notifications = ({ notificationsData, countNew, deleteNotification }) => {
           fldRejectType,
           fldTestBookName,
           fldCoverAddress,
+          fldIsArchive,
         },
         index,
       ) => (
@@ -76,10 +77,15 @@ const Notifications = ({ notificationsData, countNew, deleteNotification }) => {
               </span>
             ) : null}
 
-            <p className="mt-1">
+            <p className="mt-1" style={{ lineHeight: '1.25rem' }}>
               کتاب <span className="font-weight-bold">{fldTestBookName}</span>{' '}
               توسط ادمین{' '}
-              {fldIsApprove === 0 ? (
+              {fldIsArchive === true ? (
+                <span className="font-weight-bold" style={{ color: '#debb13' }}>
+                  {' '}
+                  بایگانی شد
+                </span>
+              ) : fldIsApprove === 0 ? (
                 <span className="text-secondary font-weight-bold">
                   تایید نشد
                 </span>

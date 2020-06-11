@@ -46,6 +46,7 @@ export default function EnhancedTable(props) {
         archiveDate: data.fldArchiveDate,
         percentage: data.fldPercentage,
         cover: data.fldCoverAddress,
+        catagory: data.fldWPCategory ? data.fldWPCategory : '',
       });
     });
   }
@@ -174,14 +175,14 @@ export default function EnhancedTable(props) {
   // Head Rows
   const headCells = [
     {
-      id: 'archiveDate',
-      numeric: true,
-      label: 'تاریخ بایگانی',
-    },
-    {
       id: 'date',
       numeric: true,
       label: 'تاریخ آخرین تغییرات',
+    },
+    {
+      id: 'archiveDate',
+      numeric: true,
+      label: 'تاریخ بایگانی',
     },
     {
       id: 'approve',
@@ -448,6 +449,7 @@ export default function EnhancedTable(props) {
                           inputProps={{ 'aria-labelledby': labelId }}
                         /> */}
                         </TableCell>
+                        <TableCell align="right">{row.date}</TableCell>
                         {/* Archive */}
                         <TableCell align="right">
                           {row.archiveDate !== ''
@@ -517,7 +519,11 @@ export default function EnhancedTable(props) {
                               />
                               <Button
                                 onClick={() => {
-                                  props.updateArchive(dataArchive.id, archive);
+                                  props.updateArchive(
+                                    dataArchive.id,
+                                    archive,
+                                    dataArchive.price,
+                                  );
                                   handleCloseArchive();
                                 }}
                                 color="outline-primary"
@@ -529,7 +535,6 @@ export default function EnhancedTable(props) {
                             </FormGroup>
                           </Popover>
                         </TableCell>
-                        <TableCell align="right">{row.date}</TableCell>
                         <TableCell
                           component="th"
                           id={labelId}
@@ -792,7 +797,14 @@ export default function EnhancedTable(props) {
                           </Popover>
                         </TableCell>
                         <TableCell>
-                          {row.price} ریال
+                          <span
+                            style={{
+                              display: 'inline-table',
+                              direction: 'rtl',
+                            }}
+                          >
+                            {row.price} ریال
+                          </span>
                           <Tooltip
                             className="table-icon-edit"
                             title={
@@ -840,9 +852,9 @@ export default function EnhancedTable(props) {
                               >
                                 قیمت جدید
                               </Label>
-                              <div className="d-flex align-items-center pl-1">
+                              <div className="d-flex align-items-center pl-1 ">
                                 <Input
-                                  className="direction-right col-11 form-control"
+                                  className="col-11 form-control"
                                   type="number"
                                   name="text"
                                   id="exampleText"
@@ -860,7 +872,11 @@ export default function EnhancedTable(props) {
                               </div>
                               <Button
                                 onClick={() => {
-                                  props.updatePrice(dataPrice.id, price);
+                                  props.updatePrice(
+                                    dataPrice.id,
+                                    price,
+                                    dataPrice.archiveDate,
+                                  );
                                   handleClosePrice();
                                 }}
                                 color="outline-primary"
